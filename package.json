@@ -1,0 +1,31 @@
+{
+  "name": "clearq",
+  "version": "1.0.0",
+  "description": "Front end clean arquitecture proof of concept",
+  "workspaces": [
+    "packages/**"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josempineiro/clearq.git"
+  },
+  "keywords": [
+    "front",
+    "clean",
+    "arquitecture",
+    "poc"
+  ],
+  "author": "Jose Piñeiro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josempineiro/clearq/issues"
+  },
+  "homepage": "https://github.com/josempineiro/clearq#readme",
+  "devDependencies": {
+    "typescript": "^5.1.3"
+  }
+}
