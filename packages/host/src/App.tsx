@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 
-const BestSellers = lazy(() => import("remoteProducts/BestSellers"));
-const ProductDetails = lazy(() => import("remoteProducts/ProductDetails"));
+const BestSellers = lazy(() => import("remotePokemon/BestSellers"));
+const PokemonDetails = lazy(() => import("remotePokemon/PokemonDetails"));
 
 function App() {
   return (
@@ -10,8 +10,8 @@ function App() {
         <Suspense fallback={<div>Loading BestSellers...</div>}>
           <BestSellers />
         </Suspense>
-        <Suspense fallback={<div>Loading ProductDetails...</div>}>
-          <ProductDetails id="1" />
+        <Suspense fallback={<div>Loading PokemonDetails...</div>}>
+          <PokemonDetails id="1" />
         </Suspense>
       </div>
     </>

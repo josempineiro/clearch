@@ -1,4 +1,4 @@
-import styles from "./ProductDetails.module.css";
+import styles from "./PokemonDetails.module.css";
 
 interface Price {
   amount: number;
@@ -7,7 +7,7 @@ interface Price {
 
 type ProcuctId = string;
 
-interface Product {
+interface Pokemon {
   id: ProcuctId;
   name: string;
   description: string;
@@ -15,10 +15,10 @@ interface Product {
   images: Array<string>;
 }
 
-const createAProduct = (id: ProcuctId): Product => ({
+const createAPokemon = (id: ProcuctId): Pokemon => ({
   id,
-  name: `Product name ${id}`,
-  description: `Product description ${id}`,
+  name: `Pokemon name ${id}`,
+  description: `Pokemon description ${id}`,
   price: { amount: 99.99, currency: "EUR" },
   images: [
     "https://via.placeholder.com/150",
@@ -27,17 +27,17 @@ const createAProduct = (id: ProcuctId): Product => ({
   ],
 });
 
-const useProduct = (id: string): { product: Product } => {
+const usePokemon = (id: string): { product: Pokemon } => {
   return {
-    product: createAProduct(id),
+    product: createAPokemon(id),
   };
 };
 
-const ProductDetails = ({ id }: { id: ProcuctId }) => {
-  const { product } = useProduct(id);
+const PokemonDetails = ({ id }: { id: ProcuctId }) => {
+  const { product } = usePokemon(id);
   return (
     <div className={styles.root}>
-      <h1>ProductDetails</h1>
+      <h1>PokemonDetails</h1>
       <div>
         <h2>{product.name}</h2>
         <p>{product.description}</p>
@@ -50,4 +50,4 @@ const ProductDetails = ({ id }: { id: ProcuctId }) => {
   );
 };
 
-export default ProductDetails;
+export default PokemonDetails;

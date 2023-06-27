@@ -5,9 +5,9 @@ const BestSellers = () => {
     <div className={styles.root}>
       <h1>Best Sellers</h1>
       <ul>
-        <li>Product 1</li>
-        <li>Product 2</li>
-        <li>Product 3</li>
+        <li>Pokemon 1</li>
+        <li>Pokemon 2</li>
+        <li>Pokemon 3</li>
       </ul>
     </div>
   );

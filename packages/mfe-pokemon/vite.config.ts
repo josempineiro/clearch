@@ -7,11 +7,11 @@ export default defineConfig({
   plugins: [
     react(),
     federation({
-      name: "remoteProducts",
-      filename: "remoteProducts.js",
+      name: "remotePokemon",
+      filename: "remotePokemon.js",
       exposes: {
         "./BestSellers": "./src/components/BestSellers/BestSellers",
-        "./ProductDetails": "./src/components/ProductDetails/ProductDetails",
+        "./PokemonDetails": "./src/components/PokemonDetails/PokemonDetails",
       },
       shared: ["react", "react-dom", "react-router-dom"],
     }),
