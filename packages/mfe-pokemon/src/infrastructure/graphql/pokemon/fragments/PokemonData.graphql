@@ -1,0 +1,4 @@
+fragment PokemonData on Pokemon {
+  id
+  name
+}

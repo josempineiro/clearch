@@ -7,7 +7,15 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "dev:mfe-pokemon": "cd packages/mfe-pokemon && npm run deploy",
+    "dev:bff-pokemon": "cd packages/bff-pokemon && npm run start",
+    "dev:host": "cd packages/host && npm run dev",
+    "dev": "npm-run-all -p dev:bff-pokemon dev:mfe-pokemon dev:host",
+    "start:mfe-pokemon": "cd packages/mfe-pokemon && npm run deploy",
+    "start:bff-pokemon": "cd packages/bff-pokemon && npm run start",
+    "start:host": "cd packages/host && npm run start",
+    "start": "npm-run-all -p start:bff-pokemon start:mfe-pokemon start:host"
   },
   "repository": {
     "type": "git",
@@ -26,6 +34,7 @@
   },
   "homepage": "https://github.com/josempineiro/clearq#readme",
   "devDependencies": {
+    "npm-run-all": "^4.1.5",
     "typescript": "^5.1.3"
   }
 }

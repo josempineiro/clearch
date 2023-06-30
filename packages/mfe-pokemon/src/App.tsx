@@ -1,11 +1,12 @@
 import "./App.css";
-import BestSellers from "./components/BestSellers";
+import Pokemons from "./modules/Pokemons";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <BestSellers />
-    </div>
+    <BrowserRouter>
+      <Pokemons />
+    </BrowserRouter>
   );
 }
 

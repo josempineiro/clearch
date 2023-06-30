@@ -10,7 +10,7 @@ export default defineConfig({
       name: "remotePokemon",
       filename: "remotePokemon.js",
       exposes: {
-        "./BestSellers": "./src/components/BestSellers/BestSellers",
+        "./Pokemons": "./src/modules/Pokemons",
         "./PokemonDetails": "./src/components/PokemonDetails/PokemonDetails",
       },
       shared: ["react", "react-dom", "react-router-dom"],

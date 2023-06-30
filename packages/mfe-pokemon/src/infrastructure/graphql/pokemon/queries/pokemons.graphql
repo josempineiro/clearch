@@ -1,0 +1,6 @@
+#import "../fragments/PokemonData.graphql"
+query pokemons {
+  pokemons {
+    ...PokemonData
+  }
+}

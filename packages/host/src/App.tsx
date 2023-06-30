@@ -1,20 +1,16 @@
-import React, { lazy, Suspense } from "react";
-
-const BestSellers = lazy(() => import("remotePokemon/BestSellers"));
-const PokemonDetails = lazy(() => import("remotePokemon/PokemonDetails"));
+import { Routes, Route } from "react-router-dom";
+import { RemotePokemons } from "./remotes";
 
 function App() {
   return (
-    <>
-      <div className="card">
-        <Suspense fallback={<div>Loading BestSellers...</div>}>
-          <BestSellers />
-        </Suspense>
-        <Suspense fallback={<div>Loading PokemonDetails...</div>}>
-          <PokemonDetails id="1" />
-        </Suspense>
-      </div>
-    </>
+    <div>
+      <header>
+        <h1>Host</h1>
+      </header>
+      <Routes>
+        <Route path="/pokemons/*" element={<RemotePokemons />} />
+      </Routes>
+    </div>
   );
 }
 
