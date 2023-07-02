@@ -1,11 +1,17 @@
-import { Routes, Route } from "react-router-dom";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import { PokemonsPage, PokemonPage } from "../pages";
-
+import { Routes, Route } from 'react-router-dom'
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
+import { PokemonsPage, PokemonPage } from '../pages'
+const NotFound = () => <div>Not found</div>
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache(),
-});
+  uri: 'http://localhost:4000/graphql',
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {},
+      },
+    },
+  }),
+})
 
 const Pokemons = () => {
   return (
@@ -15,10 +21,11 @@ const Pokemons = () => {
         <Routes>
           <Route path="/:id" element={<PokemonPage />} />
           <Route path="/" element={<PokemonsPage />} />
+          <Route element={<NotFound />} />
         </Routes>
       </div>
     </ApolloProvider>
-  );
-};
+  )
+}
 
-export default Pokemons;
+export default Pokemons

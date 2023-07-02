@@ -17,9 +17,17 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Ability = {
+  __typename?: 'Ability';
+  effects: Array<Maybe<Scalars['String']['output']>>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type Pokemon = {
   __typename?: 'Pokemon';
-  id: Scalars['Int']['output'];
+  abilities: Array<Ability>;
+  id: Scalars['String']['output'];
   name: Scalars['String']['output'];
 };
 
@@ -27,6 +35,7 @@ export type Query = {
   __typename?: 'Query';
   pokemon: Pokemon;
   pokemons: Array<Pokemon>;
+  trainers: Array<Trainer>;
 };
 
 
@@ -34,24 +43,42 @@ export type QueryPokemonArgs = {
   id: Scalars['ID']['input'];
 };
 
-export type PokemonDataFragment = { __typename?: 'Pokemon', id: number, name: string };
+export type Trainer = {
+  __typename?: 'Trainer';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  pokemons: Array<Pokemon>;
+};
+
+export type PokemonDataFragment = { __typename?: 'Pokemon', id: string, name: string };
 
 export type PokemonQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type PokemonQuery = { __typename?: 'Query', pokemon: { __typename?: 'Pokemon', id: number, name: string } };
+export type PokemonQuery = { __typename?: 'Query', pokemon: { __typename?: 'Pokemon', id: string, name: string } };
+
+export type AbilitiesFragment = { __typename?: 'Pokemon', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> };
 
 export type PokemonsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PokemonsQuery = { __typename?: 'Query', pokemons: Array<{ __typename?: 'Pokemon', id: number, name: string }> };
+export type PokemonsQuery = { __typename?: 'Query', pokemons: Array<{ __typename?: 'Pokemon', id: string, name: string } & ({ __typename?: 'Pokemon', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'Pokemon', abilities?: never })> };
 
 export const PokemonDataFragmentDoc = gql`
     fragment PokemonData on Pokemon {
   id
   name
+}
+    `;
+export const AbilitiesFragmentDoc = gql`
+    fragment Abilities on Pokemon {
+  abilities {
+    name
+    id
+    effects
+  }
 }
     `;
 export const PokemonDocument = gql`
@@ -92,10 +119,12 @@ export type PokemonQueryResult = Apollo.QueryResult<PokemonQuery, PokemonQueryVa
 export const PokemonsDocument = gql`
     query pokemons {
   pokemons {
-    ...PokemonData
+    id
+    name
+    ...Abilities @defer
   }
 }
-    ${PokemonDataFragmentDoc}`;
+    ${AbilitiesFragmentDoc}`;
 
 /**
  * __usePokemonsQuery__

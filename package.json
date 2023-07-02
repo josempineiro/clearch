@@ -8,14 +8,16 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "dev:mfe-pokemon": "cd packages/mfe-pokemon && npm run deploy",
-    "dev:bff-pokemon": "cd packages/bff-pokemon && npm run start",
+    "build:lib:ui": "cd packages/ui && npm run build:lib",
+    "deploy:mfe:pokemon": "cd packages/mfe-pokemon && npm run deploy",
+    "dev:mfe:pokemon": "cd packages/mfe-pokemon && npm run dev",
+    "dev:bff:pokemon": "cd packages/bff-pokemon && npm run dev",
     "dev:host": "cd packages/host && npm run dev",
-    "dev": "npm-run-all -p dev:bff-pokemon dev:mfe-pokemon dev:host",
-    "start:mfe-pokemon": "cd packages/mfe-pokemon && npm run deploy",
-    "start:bff-pokemon": "cd packages/bff-pokemon && npm run start",
-    "start:host": "cd packages/host && npm run start",
-    "start": "npm-run-all -p start:bff-pokemon start:mfe-pokemon start:host"
+    "dev:prepare": "npm-run-all -p build:lib:ui",
+    "dev:start": "npm-run-all -p deploy:mfe:pokemon dev:bff:pokemon dev:mfe:pokemon dev:host",
+    "dev": "npm run dev:prepare && npm run dev:start",
+    "codegen:grapqhl:mfe:pokemon": "cd packages/mfe-pokemon && npm run codegen:graphql",
+    "codegen:grapqhl": "npm-run-all -p codegen:grapqhl:mfe:pokemon"
   },
   "repository": {
     "type": "git",
@@ -36,5 +38,9 @@
   "devDependencies": {
     "npm-run-all": "^4.1.5",
     "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "@graphql-tools/utils": "^10.0.1",
+    "graphql": "^16.1.0-experimental-stream-defer.6"
   }
 }

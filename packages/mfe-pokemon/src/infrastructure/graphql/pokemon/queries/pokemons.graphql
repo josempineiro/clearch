@@ -1,6 +1,15 @@
-#import "../fragments/PokemonData.graphql"
+fragment Abilities on Pokemon {
+  abilities {
+    name
+    id
+    effects
+  }
+}
+
 query pokemons {
   pokemons {
-    ...PokemonData
+    id
+    name
+    ...Abilities @defer
   }
 }

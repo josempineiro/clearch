@@ -1,44 +1,33 @@
-import { Link, useParams, useLocation } from "react-router-dom";
-import PokemonDetails from "../components/PokemonDetails/PokemonDetails";
+import { Link, useParams, useLocation } from 'react-router-dom'
+import PokemonDetails from '../components/PokemonDetails/PokemonDetails'
+import { Button } from '@clearq/ui'
 
 type PokemonPageParams = {
-  id: string;
-};
+  id: string
+}
 
 const PokemonPage = () => {
-  const { id } = useParams<PokemonPageParams>();
-  const location = useLocation();
+  const { id } = useParams<PokemonPageParams>()
+  const location = useLocation()
   return (
     <div>
       <h3>Pokemon page</h3>
       {id && (
         <div>
-          <button>
-            <Link
-              to={location.pathname.replace(
-                id,
-                (parseInt(id, 10) - 1).toString()
-              )}
-            >
-              Previous
-            </Link>
-          </button>
-          <a href="/">Menu</a>
-          <button>
-            <Link
-              to={location.pathname.replace(
-                id,
-                (parseInt(id, 10) + 1).toString()
-              )}
-            >
-              Next
-            </Link>
-          </button>
+          <Link to={'/'}>
+            <Button variant="primary">Return</Button>
+          </Link>
+          <Link to={location.pathname.replace(id, (parseInt(id, 10) - 1).toString())}>
+            <Button variant="secondary">Previous</Button>
+          </Link>
+          <Link to={location.pathname.replace(id, (parseInt(id, 10) + 1).toString())}>
+            <Button variant="secondary">Next</Button>
+          </Link>
         </div>
       )}
       <PokemonDetails id={id as string} />
     </div>
-  );
-};
+  )
+}
 
-export default PokemonPage;
+export default PokemonPage

@@ -2,9 +2,23 @@
 # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
 # This "Book" type defines the queryable fields for every book in our data source.
-type Pokemon {
-  id: Int!
+
+type Ability {
+  id: ID!
   name: String!
+  effects: [String]!
+}
+
+type Pokemon {
+  id: String!
+  name: String!
+  abilities: [Ability!]!
+}
+
+type Trainer {
+  id: ID!
+  name: String!
+  pokemons: [Pokemon!]!
 }
 
 # The "Query" type is special: it lists all of the available queries that
@@ -13,4 +27,5 @@ type Pokemon {
 type Query {
   pokemons: [Pokemon!]!
   pokemon(id: ID!): Pokemon!
+  trainers: [Trainer!]!
 }
