@@ -1,2 +1,5 @@
 import './theme.css'
-export * from './atoms/button'
+export * from './atoms'
+export * from './molecules'
+export * from './contexts'
+export * from './templates'

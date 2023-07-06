@@ -1,17 +1,18 @@
-import { Routes, Route } from "react-router-dom";
-import { RemotePokemons } from "./remotes";
+import { Routes, Route } from 'react-router-dom'
+import { RemotePokemons } from './remotes'
+import { Layout } from '@clearq/ui'
 
 function App() {
   return (
-    <div>
+    <Layout>
       <header>
         <h1>Host</h1>
       </header>
       <Routes>
         <Route path="/pokemons/*" element={<RemotePokemons />} />
       </Routes>
-    </div>
-  );
+    </Layout>
+  )
 }
 
-export default App;
+export default App

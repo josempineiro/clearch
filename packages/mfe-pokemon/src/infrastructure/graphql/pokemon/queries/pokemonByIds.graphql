@@ -1,0 +1,13 @@
+query pokemonByIds($ids: [ID!]!) {
+  pokemonsByIds(ids: $ids) {
+    id
+    name
+    ... @defer {
+      abilities {
+        name
+        id
+        effects
+      }
+    }
+  }
+}

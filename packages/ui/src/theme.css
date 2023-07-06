@@ -4,6 +4,10 @@
   --color-primary: #646cff;
   --color-secondary: #a2a2ff;
   --color-tertiary: #1a1a1a;
+
+  --color-gray-300: #e0e0e0;
+
+  --header-height: 64px;
 }
 
 body {

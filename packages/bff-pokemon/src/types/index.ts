@@ -16,8 +16,8 @@ export interface PokemonsPokeApiDto {
 }
 
 export type ServerContext = {
-  pokemons?: PokemonsPokeApiDto
-  pokemonByIds?: {
-    [id: string]: PokemonPokeApiDto
+  loaders: {
+    pokemons: any
+    abilities: any
   }
 }

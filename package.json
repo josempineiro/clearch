@@ -12,12 +12,14 @@
     "deploy:mfe:pokemon": "cd packages/mfe-pokemon && npm run deploy",
     "dev:mfe:pokemon": "cd packages/mfe-pokemon && npm run dev",
     "dev:bff:pokemon": "cd packages/bff-pokemon && npm run dev",
+    "dev:lib:ui": "cd packages/ui && npm run dev",
     "dev:host": "cd packages/host && npm run dev",
     "dev:prepare": "npm-run-all -p build:lib:ui",
-    "dev:start": "npm-run-all -p deploy:mfe:pokemon dev:bff:pokemon dev:mfe:pokemon dev:host",
+    "dev:start": "npm-run-all -p deploy:mfe:pokemon dev:bff:pokemon dev:mfe:pokemon dev:host dev:lib:ui",
     "dev": "npm run dev:prepare && npm run dev:start",
-    "codegen:grapqhl:mfe:pokemon": "cd packages/mfe-pokemon && npm run codegen:graphql",
-    "codegen:grapqhl": "npm-run-all -p codegen:grapqhl:mfe:pokemon"
+    "codegen:graphql:mfe:pokemon": "cd packages/mfe-pokemon && npm run codegen:graphql",
+    "codegen:graphql": "npm-run-all -p codegen:graphql:mfe:pokemon",
+    "codegen": "npm-run-all -p codegen:graphql"
   },
   "repository": {
     "type": "git",

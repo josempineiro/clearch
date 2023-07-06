@@ -1,0 +1,10 @@
+query allPokemons {
+  pokemons: allPokemons {
+    id
+    name
+    images {
+      main
+      all
+    }
+  }
+}

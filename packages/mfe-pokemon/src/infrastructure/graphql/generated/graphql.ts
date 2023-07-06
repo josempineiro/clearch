@@ -24,23 +24,61 @@ export type Ability = {
   name: Scalars['String']['output'];
 };
 
+export type Images = {
+  __typename?: 'Images';
+  all: Array<Scalars['String']['output']>;
+  main: Scalars['String']['output'];
+};
+
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  endCursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
+};
+
 export type Pokemon = {
   __typename?: 'Pokemon';
   abilities: Array<Ability>;
   id: Scalars['String']['output'];
+  images?: Maybe<Images>;
   name: Scalars['String']['output'];
+};
+
+export type PokemonEdge = {
+  __typename?: 'PokemonEdge';
+  cursor: Scalars['String']['output'];
+  node: Pokemon;
+};
+
+export type PokemonsConnection = {
+  __typename?: 'PokemonsConnection';
+  edges: Array<PokemonEdge>;
+  pageInfo: PageInfo;
 };
 
 export type Query = {
   __typename?: 'Query';
+  allPokemons: Array<Pokemon>;
   pokemon: Pokemon;
-  pokemons: Array<Pokemon>;
+  pokemons: PokemonsConnection;
+  pokemonsByIds: Array<Pokemon>;
   trainers: Array<Trainer>;
 };
 
 
 export type QueryPokemonArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryPokemonsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryPokemonsByIdsArgs = {
+  ids: Array<Scalars['ID']['input']>;
 };
 
 export type Trainer = {
@@ -50,44 +88,101 @@ export type Trainer = {
   pokemons: Array<Pokemon>;
 };
 
-export type PokemonDataFragment = { __typename?: 'Pokemon', id: string, name: string };
+export type AllPokemonsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllPokemonsQuery = { __typename?: 'Query', pokemons: Array<{ __typename?: 'Pokemon', id: string, name: string, images?: { __typename?: 'Images', main: string, all: Array<string> } | null }> };
+
+export type PokemonDetailsFragment = { __typename?: 'Pokemon', id: string, name: string } & ({ __typename?: 'Pokemon', abilities: Array<{ __typename?: 'Ability', name: string, id: string }> } | { __typename?: 'Pokemon', abilities?: never });
 
 export type PokemonQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type PokemonQuery = { __typename?: 'Query', pokemon: { __typename?: 'Pokemon', id: string, name: string } };
+export type PokemonQuery = { __typename?: 'Query', pokemon: { __typename?: 'Pokemon', id: string, name: string, abilities: Array<{ __typename?: 'Ability', name: string, id: string }> } };
 
-export type AbilitiesFragment = { __typename?: 'Pokemon', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> };
+export type PokemonByIdsQueryVariables = Exact<{
+  ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
 
-export type PokemonsQueryVariables = Exact<{ [key: string]: never; }>;
+
+export type PokemonByIdsQuery = { __typename?: 'Query', pokemonsByIds: Array<{ __typename?: 'Pokemon', id: string, name: string } & ({ __typename?: 'Pokemon', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'Pokemon', abilities?: never })> };
+
+export type PokemonNodeFragment = { __typename?: 'Pokemon', id: string, name: string };
+
+export type PokemonsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type PokemonsQuery = { __typename?: 'Query', pokemons: Array<{ __typename?: 'Pokemon', id: string, name: string } & ({ __typename?: 'Pokemon', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'Pokemon', abilities?: never })> };
+export type PokemonsQuery = { __typename?: 'Query', pokemons: { __typename?: 'PokemonsConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'PokemonEdge', cursor: string, node: { __typename?: 'Pokemon', id: string, name: string } }> } };
 
-export const PokemonDataFragmentDoc = gql`
-    fragment PokemonData on Pokemon {
+export const PokemonDetailsFragmentDoc = gql`
+    fragment PokemonDetails on Pokemon {
+  id
+  name
+  ... @defer {
+    abilities {
+      name
+      id
+    }
+  }
+}
+    `;
+export const PokemonNodeFragmentDoc = gql`
+    fragment PokemonNode on Pokemon {
   id
   name
 }
     `;
-export const AbilitiesFragmentDoc = gql`
-    fragment Abilities on Pokemon {
-  abilities {
-    name
+export const AllPokemonsDocument = gql`
+    query allPokemons {
+  pokemons: allPokemons {
     id
-    effects
+    name
+    images {
+      main
+      all
+    }
   }
 }
     `;
+
+/**
+ * __useAllPokemonsQuery__
+ *
+ * To run a query within a React component, call `useAllPokemonsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllPokemonsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllPokemonsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllPokemonsQuery(baseOptions?: Apollo.QueryHookOptions<AllPokemonsQuery, AllPokemonsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllPokemonsQuery, AllPokemonsQueryVariables>(AllPokemonsDocument, options);
+      }
+export function useAllPokemonsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllPokemonsQuery, AllPokemonsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllPokemonsQuery, AllPokemonsQueryVariables>(AllPokemonsDocument, options);
+        }
+export type AllPokemonsQueryHookResult = ReturnType<typeof useAllPokemonsQuery>;
+export type AllPokemonsLazyQueryHookResult = ReturnType<typeof useAllPokemonsLazyQuery>;
+export type AllPokemonsQueryResult = Apollo.QueryResult<AllPokemonsQuery, AllPokemonsQueryVariables>;
 export const PokemonDocument = gql`
     query pokemon($id: ID!) {
   pokemon(id: $id) {
-    ...PokemonData
+    ...PokemonDetails
   }
 }
-    ${PokemonDataFragmentDoc}`;
+    ${PokemonDetailsFragmentDoc}`;
 
 /**
  * __usePokemonQuery__
@@ -116,15 +211,65 @@ export function usePokemonLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Po
 export type PokemonQueryHookResult = ReturnType<typeof usePokemonQuery>;
 export type PokemonLazyQueryHookResult = ReturnType<typeof usePokemonLazyQuery>;
 export type PokemonQueryResult = Apollo.QueryResult<PokemonQuery, PokemonQueryVariables>;
-export const PokemonsDocument = gql`
-    query pokemons {
-  pokemons {
+export const PokemonByIdsDocument = gql`
+    query pokemonByIds($ids: [ID!]!) {
+  pokemonsByIds(ids: $ids) {
     id
     name
-    ...Abilities @defer
+    ... @defer {
+      abilities {
+        name
+        id
+        effects
+      }
+    }
   }
 }
-    ${AbilitiesFragmentDoc}`;
+    `;
+
+/**
+ * __usePokemonByIdsQuery__
+ *
+ * To run a query within a React component, call `usePokemonByIdsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePokemonByIdsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePokemonByIdsQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function usePokemonByIdsQuery(baseOptions: Apollo.QueryHookOptions<PokemonByIdsQuery, PokemonByIdsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PokemonByIdsQuery, PokemonByIdsQueryVariables>(PokemonByIdsDocument, options);
+      }
+export function usePokemonByIdsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PokemonByIdsQuery, PokemonByIdsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PokemonByIdsQuery, PokemonByIdsQueryVariables>(PokemonByIdsDocument, options);
+        }
+export type PokemonByIdsQueryHookResult = ReturnType<typeof usePokemonByIdsQuery>;
+export type PokemonByIdsLazyQueryHookResult = ReturnType<typeof usePokemonByIdsLazyQuery>;
+export type PokemonByIdsQueryResult = Apollo.QueryResult<PokemonByIdsQuery, PokemonByIdsQueryVariables>;
+export const PokemonsDocument = gql`
+    query pokemons($first: Int, $after: String) {
+  pokemons(first: $first, after: $after) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      cursor
+      node {
+        ...PokemonNode
+      }
+    }
+  }
+}
+    ${PokemonNodeFragmentDoc}`;
 
 /**
  * __usePokemonsQuery__
@@ -138,6 +283,8 @@ export const PokemonsDocument = gql`
  * @example
  * const { data, loading, error } = usePokemonsQuery({
  *   variables: {
+ *      first: // value for 'first'
+ *      after: // value for 'after'
  *   },
  * });
  */

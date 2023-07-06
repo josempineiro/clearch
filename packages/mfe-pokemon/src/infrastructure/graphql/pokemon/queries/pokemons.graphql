@@ -1,15 +1,19 @@
-fragment Abilities on Pokemon {
-  abilities {
-    name
-    id
-    effects
-  }
+fragment PokemonNode on Pokemon {
+  id
+  name
 }
 
-query pokemons {
-  pokemons {
-    id
-    name
-    ...Abilities @defer
+query pokemons($first: Int, $after: String) {
+  pokemons(first: $first, after: $after) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      cursor
+      node {
+        ...PokemonNode
+      }
+    }
   }
 }

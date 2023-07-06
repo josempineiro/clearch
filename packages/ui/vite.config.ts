@@ -34,6 +34,14 @@ const app = async (): Promise<UserConfigExport> => {
         },
       },
     },
+    resolve: {
+      alias: [
+        {
+          find: /^@\/(.*)/,
+          replacement: '/src/$1',
+        },
+      ],
+    },
     test: {
       globals: true,
       environment: 'jsdom',

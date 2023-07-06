@@ -1,3 +1,4 @@
+import React from 'react'
 import { Button, ButtonProps } from './button'
 import { Meta } from '@storybook/react'
 import type { StoryFn } from '@storybook/react'

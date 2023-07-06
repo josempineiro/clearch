@@ -5,3 +5,35 @@
   justify-content: center;
   width: 100%;
 }
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  transition: all 0.2s ease-in-out;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
+}
+
+.image {
+  width: 48px;
+  aspect-ratio: 1;
+  margin-right: 1rem;
+}
+
+.PokemonVirtualizedListItem {
+  transition: all 0.2s ease-in-out;
+}

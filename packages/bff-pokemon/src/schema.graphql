@@ -9,10 +9,31 @@ type Ability {
   effects: [String]!
 }
 
+type Images {
+  main: String!
+  all: [String!]!
+}
+
 type Pokemon {
   id: String!
   name: String!
   abilities: [Ability!]!
+  images: Images
+}
+
+type PokemonEdge {
+  cursor: String!
+  node: Pokemon!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+}
+
+type PokemonsConnection {
+  edges: [PokemonEdge!]!
+  pageInfo: PageInfo!
 }
 
 type Trainer {
@@ -25,7 +46,9 @@ type Trainer {
 # clients can execute, along with the return type for each. In this
 # case, the "books" query returns an array of zero or more Books (defined above).
 type Query {
-  pokemons: [Pokemon!]!
+  allPokemons: [Pokemon!]!
+  pokemonsByIds(ids: [ID!]!): [Pokemon!]!
+  pokemons(first: Int, after: String): PokemonsConnection!
   pokemon(id: ID!): Pokemon!
   trainers: [Trainer!]!
 }

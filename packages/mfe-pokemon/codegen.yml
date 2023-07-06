@@ -1,10 +1,12 @@
 # codegen.yml
 overwrite: true
-schema: "../bff-pokemon/src/schema.graphql"
-documents: "src/infrastructure/graphql/**/*.graphql"
+schema: '../bff-pokemon/src/schema.graphql'
+documents: 'src/infrastructure/graphql/**/*.graphql'
 generates:
   src/infrastructure/graphql/generated/graphql.ts:
     plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+    config:
+      fragmentName: ''

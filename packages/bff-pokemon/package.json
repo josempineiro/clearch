@@ -15,6 +15,7 @@
     "@graphql-tools/utils": "^10.0.1",
     "@graphql-yoga/plugin-defer-stream": "2.0.3",
     "@graphql-yoga/render-graphiql": "4.0.3",
+    "dataloader": "^2.2.2",
     "graphql": "16.6.0",
     "graphql-fields": "^2.0.3",
     "graphql-yoga": "4.0.3"
