@@ -1,13 +1,16 @@
 import { Routes, Route } from 'react-router-dom'
 import { RemotePokemons } from './remotes'
-import { Layout } from '@clearq/ui'
+import { Layout, Header } from '@clearq/ui'
 
 function App() {
   return (
-    <Layout>
-      <header>
-        <h1>Host</h1>
-      </header>
+    <Layout
+      header={
+        <Header>
+          <span>Host</span>
+        </Header>
+      }
+    >
       <Routes>
         <Route path="/pokemons/*" element={<RemotePokemons />} />
       </Routes>

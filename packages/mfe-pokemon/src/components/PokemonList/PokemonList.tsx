@@ -1,73 +1,20 @@
 import { useRef } from 'react'
-import _ from 'lodash'
-import cn from 'classnames'
-import {
-  useAllPokemonsQuery,
-  usePokemonQuery,
-  PokemonNodeFragment,
-} from '../../infrastructure/graphql/generated/graphql'
-import styles from './PokemonList.module.css'
+import { useAllPokemonsQuery, PokemonNodeFragment } from '../../infrastructure/graphql/generated/graphql'
 import {
   ForwardedVirtualizedList,
   VirtualizedListRef,
-  Image,
   AutoSizer,
   AutoSizerChildrenProps,
-  ListItemProps,
-  ListItem,
   ExpandableItemsProvider,
   useExpandableItemsContext,
 } from '@clearq/ui'
-
-const imagePlaceholder = 'https://via.placeholder.com/150'
-
-const PokemonListItem = ({ item, onClick }: { item: PokemonNodeFragment; onClick: () => void }) => {
-  const expandableItems = useExpandableItemsContext<PokemonNodeFragment>()
-  const { data, loading } = usePokemonQuery({
-    skip: expandableItems.isItemExpanded(item) === false,
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      id: item.id,
-    },
-  })
-  const isExpanded = expandableItems.isItemExpanded(item)
-  console.log('data.pokemon', data?.pokemon)
-  return (
-    <div className={styles.item} onClick={onClick}>
-      <div className={styles.wrapper}>
-        <Image className={styles.image} src={_.get(item, 'images.main', imagePlaceholder)} alt={item.name} />
-        <span>{item.id}</span>
-        <span>{item.name}</span>
-      </div>
-      {isExpanded && (
-        <div>
-          {loading && <div>Loading...</div>}
-          {data && (
-            <div>
-              <h2>{data.pokemon.name}</h2>
-              <div>
-                <Image src={_.get(data, 'images.main', imagePlaceholder)} alt={data.pokemon.name} />
-              </div>
-              <div>
-                {data.pokemon.abilities?.map((ability) => (
-                  <div key={ability.id}>{ability.name}</div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-const PokemonVirtualizedListItem = ({ className, ...props }: ListItemProps) => {
-  return <ListItem {...props} className={cn([className, styles.PokemonVirtualizedListItem])} />
-}
+import { PokemonListItem } from './PokemonListItem'
+import { PokemonVirtualizedListItem } from './PokemonVirtualizedListItem'
 
 const PokemonList = ({ pokemons }: { pokemons: PokemonNodeFragment[] }) => {
   const pokemonListRef = useRef<VirtualizedListRef<PokemonNodeFragment>>(null)
   const expandableItems = useExpandableItemsContext<PokemonNodeFragment>()
+  const scrollPosition = useRef<number>(0)
   return (
     <AutoSizer>
       {({ height }: AutoSizerChildrenProps) => (
@@ -80,8 +27,13 @@ const PokemonList = ({ pokemons }: { pokemons: PokemonNodeFragment[] }) => {
             <PokemonListItem
               {...props}
               onClick={() => {
-                pokemonListRef.current?.scrollToItem(props.item)
                 expandableItems.toggleItem(props.item)
+                if (expandableItems.isItemExpanded(props.item)) {
+                  pokemonListRef.current?.scrollToPosition(scrollPosition.current)
+                } else {
+                  scrollPosition.current = props.state.scrollPosition
+                  pokemonListRef.current?.scrollToItem(props.item)
+                }
               }}
             />
           )}

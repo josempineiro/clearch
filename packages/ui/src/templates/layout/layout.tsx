@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import style from './layout.module.css'
+import styles from './layout.module.css'
 import { Header } from '@/atoms/header'
 import { Container } from '@/atoms/container'
 
@@ -13,8 +13,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, className, header, ...
   return (
     <div
       {...rest}
-      className={cn(className, style.layout, {
-        [style.withHeader]: Boolean(header),
+      className={cn(className, styles.layout, {
+        [styles.withHeader]: Boolean(header),
       })}
     >
       {header && <Header>{header}</Header>}

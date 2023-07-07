@@ -5,7 +5,7 @@ import { PokemonsPage, PokemonPage } from '../pages'
 
 const NotFound = () => <div>Not found</div>
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  uri: 'http://192.168.1.248:4000/graphql',
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

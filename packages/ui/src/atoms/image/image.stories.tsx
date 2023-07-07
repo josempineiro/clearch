@@ -23,3 +23,12 @@ Primary.args = {
   src: 'https://placehold.co/500x400',
   onClick: () => alert('clicking primary'),
 }
+
+export const CustomSize = Template.bind({})
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+CustomSize.args = {
+  src: 'https://placehsold.co/100x200',
+  onClick: () => alert('clicking primary'),
+  width: 200,
+  height: 200,
+}

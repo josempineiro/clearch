@@ -1,0 +1,12 @@
+.image {
+  transition: all 0.6s ease;
+}
+
+.wrapper::after {
+  content: var(--image-placeholder);
+  display: block;
+  position: absolute;
+}
+.wrapper {
+  position: relative;
+}

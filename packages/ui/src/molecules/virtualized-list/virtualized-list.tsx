@@ -40,6 +40,7 @@ export type VirtualizedListRef<TItem> = {
   state: VirtualizedListState
   scrollToTop: () => void
   scrollToItem: (item: TItem) => void
+  scrollToPosition: (position: number) => void
 }
 
 export function VirtualizedList<TItem>(
@@ -104,21 +105,36 @@ export function VirtualizedList<TItem>(
     const { scrollTop } = event.currentTarget
     setScrollPosition(scrollTop)
   }
-  const scrollToTop = useCallback(() => {
+  const scrollTo = useCallback(({ top, behavior }: { top: number; behavior?: ScrollBehavior }) => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+      scrollRef.current.scrollTo({ top, behavior })
     }
   }, [])
 
+  const scrollToTop = useCallback(
+    (behavior: ScrollBehavior = 'smooth') => {
+      scrollTo({ top: 0, behavior })
+    },
+    [scrollTo],
+  )
+
   const scrollToItem = useCallback(
-    (item: TItem) => {
+    (item: TItem, behavior: ScrollBehavior = 'smooth') => {
       if (scrollRef.current) {
-        const index = items.indexOf(item)
-        const virtualizedItem = virtualizedItems[index]
-        scrollRef.current.scrollTo({ top: virtualizedItem.meta.top, behavior: 'smooth' })
+        const virtualizedItem = virtualizedItems[items.indexOf(item)]
+        scrollTo({ top: virtualizedItem.meta.top, behavior })
       }
     },
-    [items, virtualizedItems],
+    [items, scrollTo, virtualizedItems],
+  )
+
+  const scrollToPosition = useCallback(
+    (position: number, behavior: ScrollBehavior = 'smooth') => {
+      if (scrollRef.current) {
+        scrollTo({ top: position, behavior })
+      }
+    },
+    [scrollTo],
   )
 
   React.useImperativeHandle(
@@ -127,8 +143,9 @@ export function VirtualizedList<TItem>(
       state,
       scrollToTop,
       scrollToItem,
+      scrollToPosition,
     }),
-    [scrollToTop, state, scrollToItem],
+    [scrollToTop, state, scrollToItem, scrollToPosition],
   )
 
   React.useEffect(() => {

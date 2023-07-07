@@ -1,5 +1,5 @@
 import classnames from 'classnames'
-import style from './button.module.css'
+import styles from './button.module.css'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary'
@@ -7,7 +7,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const Button: React.FC<ButtonProps> = ({ variant = 'primary', children, ...props }) => {
   return (
-    <button className={classnames([style.button, style[variant]])} {...props}>
+    <button className={classnames([styles.button, styles[variant]])} {...props}>
       {children}
     </button>
   )

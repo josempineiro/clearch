@@ -6,7 +6,7 @@ import { Layout, Header } from '@clearq/ui'
 function App() {
   return (
     <BrowserRouter basename="/pokemons">
-      <Layout header={<Header />}>
+      <Layout header={<Header>Microfrontend</Header>}>
         <Pokemons />
       </Layout>
     </BrowserRouter>
