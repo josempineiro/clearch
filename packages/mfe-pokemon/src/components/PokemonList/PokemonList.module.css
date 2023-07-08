@@ -13,33 +13,3 @@
   padding: 0;
   list-style: none;
 }
-
-.item {
-  transition: all 0.2s ease;
-}
-
-.wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.5rem 1rem;
-}
-
-.image {
-  width: 48px;
-  aspect-ratio: 1;
-  margin-right: 1rem;
-}
-
-.PokemonVirtualizedListItem {
-  transition: all 0.2s ease;
-}
-
-.title {
-  height: 48px;
-  display: flex;
-  align-items: center;
-}

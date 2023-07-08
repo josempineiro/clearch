@@ -7,7 +7,9 @@
 
   --color-gray-300: #e0e0e0;
 
+  --color-bg: #1a1a1a;
   --color-bg-hover: #2e2e4e;
+  --color-bg-focus: #3a3c64;
 
   --header-height: 64px;
 }

@@ -1,4 +1,4 @@
-import pokemon, { abilities, images } from './pokemon'
+import pokemon, { abilities, details, images } from './pokemon'
 import {
   allPokemons,
   pokemons,
@@ -18,8 +18,7 @@ export default {
     pokemonsByIds,
   },
   Pokemon: {
-    abilities,
-    images,
+    details,
   },
   Trainer: {
     pokemons: trainerPokemons,
@@ -30,5 +29,9 @@ export default {
   },
   PokemonEdge: {
     node: pokemonEdgeNode,
+  },
+  PokemonDetails: {
+    abilities,
+    images,
   },
 }

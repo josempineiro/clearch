@@ -1,25 +1,23 @@
-import React, { useMemo, useCallback, useRef } from 'react'
-import { List, ListItem, ListProps, ListItemProps } from '@/atoms/list'
+import React, { useMemo, useCallback, useRef, Fragment } from 'react'
+import { List, ListProps, ListItemProps } from '@/atoms/list'
+import { Scrollable } from '@/atoms/scrollable'
 import styles from './virtualized-list.module.css'
 
-type VirtualizedListState = {
+export type VirtualizedListState = {
   scrollPosition: number
   height: number
+}
+
+export interface RenderItemProps<TItem> extends Omit<ListItemProps, 'children'> {
+  item: TItem
+  list: VirtualizedListRef<TItem>
 }
 
 export interface VirtualizedListProps<TItem> extends Omit<ListProps, 'children'> {
   height: number
   items: Array<TItem>
   threshold?: number
-  renderItem: ({
-    item,
-    meta,
-    state,
-  }: {
-    item: TItem
-    meta: VirtualizedItemMetadata
-    state: VirtualizedListState
-  }) => React.ReactNode
+  renderItem: (props: RenderItemProps<TItem>) => React.ReactNode
   getItemKey: (item: TItem) => string
   getItemHeight: (item: TItem, state: VirtualizedListState) => number
   onVisibleItemsChange?: (visibleItems: Array<TItem>) => void
@@ -36,11 +34,15 @@ export interface VirtualizedItem<TItem> {
   meta: VirtualizedItemMetadata
 }
 
-export type VirtualizedListRef<TItem> = {
-  state: VirtualizedListState
+export type VirtualizedListApi<TItem> = {
   scrollToTop: () => void
   scrollToItem: (item: TItem) => void
   scrollToPosition: (position: number) => void
+}
+
+export type VirtualizedListRef<TItem> = {
+  state: VirtualizedListState
+  api: VirtualizedListApi<TItem>
 }
 
 export function VirtualizedList<TItem>(
@@ -51,13 +53,11 @@ export function VirtualizedList<TItem>(
     threshold = 0,
     onVisibleItemsChange,
     getItemHeight,
-    VirtualizedListItem = ListItem,
     height,
     ...rest
   }: VirtualizedListProps<TItem>,
   ref?: React.Ref<VirtualizedListRef<TItem>>,
 ) {
-  console.log(ref)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [scrollPosition, setScrollPosition] = React.useState(0)
 
@@ -101,10 +101,11 @@ export function VirtualizedList<TItem>(
     return virtualizedItems.slice(startIndex, endIndex)
   }, [virtualizedItems, visibleVirtualizedItems, threshold])
 
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll = useCallback((event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop } = event.currentTarget
     setScrollPosition(scrollTop)
-  }
+  }, [])
+
   const scrollTo = useCallback(({ top, behavior }: { top: number; behavior?: ScrollBehavior }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({ top, behavior })
@@ -137,16 +138,19 @@ export function VirtualizedList<TItem>(
     [scrollTo],
   )
 
-  React.useImperativeHandle(
-    ref,
+  const list = useMemo(
     () => ({
       state,
-      scrollToTop,
-      scrollToItem,
-      scrollToPosition,
+      api: {
+        scrollToTop,
+        scrollToItem,
+        scrollToPosition,
+      },
     }),
     [scrollToTop, state, scrollToItem, scrollToPosition],
   )
+
+  React.useImperativeHandle(ref, () => list, [list])
 
   React.useEffect(() => {
     if (onVisibleItemsChange) {
@@ -155,12 +159,12 @@ export function VirtualizedList<TItem>(
   }, [renderableVirtualizedItems, onVisibleItemsChange])
 
   return (
-    <div
-      className={styles.container}
+    <Scrollable
       ref={scrollRef}
       style={{
         height,
       }}
+      className={styles.container}
       onScroll={handleScroll}
     >
       <List
@@ -172,19 +176,17 @@ export function VirtualizedList<TItem>(
         }}
       >
         {renderableVirtualizedItems.map(({ data, meta }) => (
-          <VirtualizedListItem
-            key={getItemKey(data)}
-            className={styles.virtualizedListItem}
-            style={{
-              height: meta.height,
-              top: meta.top,
-            }}
-          >
-            {renderItem({ item: data, meta, state })}
-          </VirtualizedListItem>
+          <Fragment key={getItemKey(data)}>
+            {renderItem({
+              item: data,
+              list,
+              style: { height: meta.height, top: meta.top },
+              className: styles.virtualizedListItemContent,
+            })}
+          </Fragment>
         ))}
       </List>
-    </div>
+    </Scrollable>
   )
 }
 

@@ -2,4 +2,5 @@
   box-sizing: border-box;
   cursor: pointer;
   list-style: none;
+  width: 100%;
 }

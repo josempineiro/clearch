@@ -6,15 +6,11 @@ import {
   AutoSizer,
   AutoSizerChildrenProps,
   ExpandableItemsProvider,
-  useExpandableItemsContext,
 } from '@clearq/ui'
 import { PokemonListItem } from './PokemonListItem'
-import { PokemonVirtualizedListItem } from './PokemonVirtualizedListItem'
 
 const PokemonList = ({ pokemons }: { pokemons: PokemonNodeFragment[] }) => {
   const pokemonListRef = useRef<VirtualizedListRef<PokemonNodeFragment>>(null)
-  const expandableItems = useExpandableItemsContext<PokemonNodeFragment>()
-  const scrollPosition = useRef<number>(0)
   return (
     <AutoSizer>
       {({ height }: AutoSizerChildrenProps) => (
@@ -23,28 +19,9 @@ const PokemonList = ({ pokemons }: { pokemons: PokemonNodeFragment[] }) => {
           height={height}
           threshold={10}
           items={pokemons}
-          renderItem={(props) => (
-            <PokemonListItem
-              {...props}
-              onClick={() => {
-                expandableItems.toggleItem(props.item)
-                if (expandableItems.isItemExpanded(props.item)) {
-                  pokemonListRef.current?.scrollToPosition(scrollPosition.current)
-                } else {
-                  scrollPosition.current = props.state.scrollPosition
-                  pokemonListRef.current?.scrollToItem(props.item)
-                }
-              }}
-            />
-          )}
+          renderItem={(props) => <PokemonListItem {...props} />}
           getItemKey={(pokemon) => pokemon.id}
-          getItemHeight={(item, { height }) => {
-            if (expandableItems?.isItemExpanded(item)) {
-              return height
-            }
-            return 64
-          }}
-          VirtualizedListItem={PokemonVirtualizedListItem}
+          getItemHeight={() => 64}
         />
       )}
     </AutoSizer>

@@ -1,16 +1,28 @@
-fragment PokemonDetails on Pokemon {
+fragment Abilities on PokemonDetails {
+  abilities {
+    name
+    id
+    effects
+  }
+}
+fragment Details on Pokemon {
+  details {
+    weight
+    height
+    images
+    ...Abilities @defer
+  }
+}
+
+fragment Pokemon on Pokemon {
   id
   name
-  ... @defer {
-    abilities {
-      name
-      id
-    }
-  }
+  image
+  ...Details @defer
 }
 
 query pokemon($id: ID!) {
   pokemon(id: $id) {
-    ...PokemonDetails
+    ...Pokemon
   }
 }

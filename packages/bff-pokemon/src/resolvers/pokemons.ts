@@ -15,6 +15,7 @@ interface Pokemon {
 interface PokemonBaseDto {
   id: string
   name: string
+  image: string
 }
 
 interface PokemonsDto {
@@ -31,6 +32,9 @@ const pokemonsDtoToPokemons = (pokemonsDto: PokemonsDto): Array<PokemonBaseDto> 
   return pokemonsDto.results.map((result) => ({
     id: result.url.split('/').reverse()[1],
     name: result.name,
+    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${
+      result.url.split('/').reverse()[1]
+    }.svg`,
   }))
 }
 
@@ -46,6 +50,7 @@ const pokemonDtoToPokemon = (pokemonDto: PokemonPokeApiDto): PokemonBaseDto => {
   return {
     id: pokemonDto.id.toString(),
     name: pokemonDto.name,
+    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemonDto.id}.svg`,
   }
 }
 
@@ -86,7 +91,7 @@ export async function pokemonsConnetionPageInfo(parent, { first, after }) {
 export async function allPokemons(parent, args, context, info) {
   console.log('Resolvers::allPokemons')
   const pokemons = await getPokemons({ limit: -1 }).then((pokemons) => pokemonsDtoToPokemons(pokemons))
-  if (Object.keys(graphqlFields(info)).every((field) => ['id', 'name'].indexOf(field) !== -1)) {
+  if (Object.keys(graphqlFields(info)).every((field) => ['id', 'name', 'image'].indexOf(field) !== -1)) {
     console.log('Resolvers::allPokemons::base')
     return pokemons
   }

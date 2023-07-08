@@ -24,12 +24,6 @@ export type Ability = {
   name: Scalars['String']['output'];
 };
 
-export type Images = {
-  __typename?: 'Images';
-  all: Array<Scalars['String']['output']>;
-  main: Scalars['String']['output'];
-};
-
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']['output']>;
@@ -38,10 +32,18 @@ export type PageInfo = {
 
 export type Pokemon = {
   __typename?: 'Pokemon';
-  abilities: Array<Ability>;
+  details: PokemonDetails;
   id: Scalars['String']['output'];
-  images?: Maybe<Images>;
+  image?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
+};
+
+export type PokemonDetails = {
+  __typename?: 'PokemonDetails';
+  abilities: Array<Ability>;
+  height: Scalars['Int']['output'];
+  images: Array<Scalars['String']['output']>;
+  weight: Scalars['Int']['output'];
 };
 
 export type PokemonEdge = {
@@ -91,23 +93,27 @@ export type Trainer = {
 export type AllPokemonsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllPokemonsQuery = { __typename?: 'Query', pokemons: Array<{ __typename?: 'Pokemon', id: string, name: string, images?: { __typename?: 'Images', main: string, all: Array<string> } | null }> };
+export type AllPokemonsQuery = { __typename?: 'Query', pokemons: Array<{ __typename?: 'Pokemon', id: string, name: string, image?: string | null }> };
 
-export type PokemonDetailsFragment = { __typename?: 'Pokemon', id: string, name: string } & ({ __typename?: 'Pokemon', abilities: Array<{ __typename?: 'Ability', name: string, id: string }> } | { __typename?: 'Pokemon', abilities?: never });
+export type AbilitiesFragment = { __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> };
+
+export type DetailsFragment = { __typename?: 'Pokemon', details: { __typename?: 'PokemonDetails', weight: number, height: number, images: Array<string> } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) };
+
+export type PokemonFragment = { __typename?: 'Pokemon', id: string, name: string, image?: string | null } & ({ __typename?: 'Pokemon', details: { __typename?: 'PokemonDetails', weight: number, height: number, images: Array<string> } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) } | { __typename?: 'Pokemon', details?: never });
 
 export type PokemonQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type PokemonQuery = { __typename?: 'Query', pokemon: { __typename?: 'Pokemon', id: string, name: string, abilities: Array<{ __typename?: 'Ability', name: string, id: string }> } };
+export type PokemonQuery = { __typename?: 'Query', pokemon: { __typename?: 'Pokemon', id: string, name: string, image?: string | null, details: { __typename?: 'PokemonDetails', weight: number, height: number, images: Array<string> } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) } };
 
 export type PokemonByIdsQueryVariables = Exact<{
   ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
 }>;
 
 
-export type PokemonByIdsQuery = { __typename?: 'Query', pokemonsByIds: Array<{ __typename?: 'Pokemon', id: string, name: string } & ({ __typename?: 'Pokemon', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'Pokemon', abilities?: never })> };
+export type PokemonByIdsQuery = { __typename?: 'Query', pokemonsByIds: Array<{ __typename?: 'Pokemon', id: string, name: string } & ({ __typename?: 'Pokemon', details: { __typename?: 'PokemonDetails', height: number, weight: number } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) } | { __typename?: 'Pokemon', details?: never })> };
 
 export type PokemonNodeFragment = { __typename?: 'Pokemon', id: string, name: string };
 
@@ -119,18 +125,33 @@ export type PokemonsQueryVariables = Exact<{
 
 export type PokemonsQuery = { __typename?: 'Query', pokemons: { __typename?: 'PokemonsConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'PokemonEdge', cursor: string, node: { __typename?: 'Pokemon', id: string, name: string } }> } };
 
-export const PokemonDetailsFragmentDoc = gql`
-    fragment PokemonDetails on Pokemon {
-  id
-  name
-  ... @defer {
-    abilities {
-      name
-      id
-    }
+export const AbilitiesFragmentDoc = gql`
+    fragment Abilities on PokemonDetails {
+  abilities {
+    name
+    id
+    effects
   }
 }
     `;
+export const DetailsFragmentDoc = gql`
+    fragment Details on Pokemon {
+  details {
+    weight
+    height
+    images
+    ...Abilities @defer
+  }
+}
+    ${AbilitiesFragmentDoc}`;
+export const PokemonFragmentDoc = gql`
+    fragment Pokemon on Pokemon {
+  id
+  name
+  image
+  ...Details @defer
+}
+    ${DetailsFragmentDoc}`;
 export const PokemonNodeFragmentDoc = gql`
     fragment PokemonNode on Pokemon {
   id
@@ -142,10 +163,7 @@ export const AllPokemonsDocument = gql`
   pokemons: allPokemons {
     id
     name
-    images {
-      main
-      all
-    }
+    image
   }
 }
     `;
@@ -179,10 +197,10 @@ export type AllPokemonsQueryResult = Apollo.QueryResult<AllPokemonsQuery, AllPok
 export const PokemonDocument = gql`
     query pokemon($id: ID!) {
   pokemon(id: $id) {
-    ...PokemonDetails
+    ...Pokemon
   }
 }
-    ${PokemonDetailsFragmentDoc}`;
+    ${PokemonFragmentDoc}`;
 
 /**
  * __usePokemonQuery__
@@ -217,10 +235,16 @@ export const PokemonByIdsDocument = gql`
     id
     name
     ... @defer {
-      abilities {
-        name
-        id
-        effects
+      details {
+        height
+        weight
+        ... @defer {
+          abilities {
+            name
+            id
+            effects
+          }
+        }
       }
     }
   }

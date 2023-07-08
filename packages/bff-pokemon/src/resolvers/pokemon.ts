@@ -1,11 +1,28 @@
 export default async (parent, args, context, info) => {
-  return context.loaders.pokemons.load(args.id)
+  const pokemon = await context.loaders.pokemons.load(args.id)
+  return {
+    id: pokemon.id,
+    name: pokemon.name,
+    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemon.id}.svg`,
+  }
+}
+
+export async function details(parent, args, context, info) {
+  console.log('Resolvers::pokemon::details', parent.id)
+  const pokemon = await context.loaders.pokemons.load(parent.id)
+  return {
+    id: pokemon.id,
+    height: pokemon.height,
+    weight: pokemon.weight,
+  }
 }
 
 export async function abilities(parent, args, context, info) {
-  console.log('Resolvers::pokemon::abilities', parent)
+  console.log('Resolvers::pokemon::abilities', parent.id)
+  const pokemon = await context.loaders.pokemons.load(parent.id)
+  console.log(pokemon.id)
   const abilitiesDto = await Promise.all(
-    parent.abilities.map((ability) => context.loaders.abilities.load(ability.ability?.name || ability.name)),
+    pokemon.abilities.map((ability) => context.loaders.abilities.load(ability.ability?.name || ability.name)),
   )
   return abilitiesDto.map(({ id, name, effect_entries }) => ({
     id,
@@ -15,9 +32,7 @@ export async function abilities(parent, args, context, info) {
 }
 
 export async function images(parent, args, context) {
+  console.log('Resolvers::pokemon::images', parent.id)
   const pokemon = await context.loaders.pokemons.load(parent.id)
-  return {
-    main: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${parent.id}.svg`,
-    all: Object.values(pokemon.sprites).filter((value) => value && typeof value === 'string'),
-  }
+  return Object.values(pokemon.sprites).filter((value) => value && typeof value === 'string')
 }

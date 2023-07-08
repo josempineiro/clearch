@@ -9,16 +9,18 @@ type Ability {
   effects: [String]!
 }
 
-type Images {
-  main: String!
-  all: [String!]!
+type PokemonDetails {
+  height: Int!
+  weight: Int!
+  abilities: [Ability!]!
+  images: [String!]!
 }
 
 type Pokemon {
   id: String!
   name: String!
-  abilities: [Ability!]!
-  images: Images
+  image: String
+  details: PokemonDetails!
 }
 
 type PokemonEdge {

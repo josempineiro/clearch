@@ -1,0 +1,42 @@
+.item {
+  transition: background-color, height, top;
+  transition-duration: 0.6s;
+  transition-timing-function: linear;
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
+}
+
+.item:hover,
+.item:focus {
+  z-index: 1;
+}
+
+.item:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.item:focus {
+  background-color: var(--color-bg-focus);
+}
+
+.image {
+  width: 48px;
+  aspect-ratio: 1;
+  margin-right: 1rem;
+}
+
+.title {
+  height: 48px;
+  display: flex;
+  align-items: center;
+}

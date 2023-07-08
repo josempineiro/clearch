@@ -32,24 +32,19 @@ export const yoga = createYoga<ServerContext>({
   renderGraphiQL,
   graphiql: {
     defaultQuery: `
-      query {
-        trainers {
-          id
-          name
-          pokemons {
-            id
-          }
-        }
-      }
         
       query {
-        pokemons @stream {
+        allPokemons {
           id
           name
           ... @defer {
-            abilities {
-              id
-              name
+            details {
+              height
+              weight
+              abilities {
+                id
+                name
+              }
             }
           }
         }

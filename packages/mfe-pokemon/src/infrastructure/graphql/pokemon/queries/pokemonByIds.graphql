@@ -3,10 +3,16 @@ query pokemonByIds($ids: [ID!]!) {
     id
     name
     ... @defer {
-      abilities {
-        name
-        id
-        effects
+      details {
+        height
+        weight
+        ... @defer {
+          abilities {
+            name
+            id
+            effects
+          }
+        }
       }
     }
   }
