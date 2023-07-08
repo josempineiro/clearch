@@ -1,4 +1,5 @@
-import pokemon, { abilities, details, images } from './pokemon'
+import { characteristics } from './stat'
+import pokemon, { abilities, details, images, stats } from './pokemon'
 import {
   allPokemons,
   pokemons,
@@ -33,5 +34,9 @@ export default {
   PokemonDetails: {
     abilities,
     images,
+    stats,
+  },
+  Stat: {
+    characteristics,
   },
 }

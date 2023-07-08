@@ -43,6 +43,7 @@ export type PokemonDetails = {
   abilities: Array<Ability>;
   height: Scalars['Int']['output'];
   images: Array<Scalars['String']['output']>;
+  stats: Array<Maybe<Stat>>;
   weight: Scalars['Int']['output'];
 };
 
@@ -83,6 +84,15 @@ export type QueryPokemonsByIdsArgs = {
   ids: Array<Scalars['ID']['input']>;
 };
 
+export type Stat = {
+  __typename?: 'Stat';
+  characteristics: Array<Scalars['String']['output']>;
+  effort: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  value: Scalars['Int']['output'];
+};
+
 export type Trainer = {
   __typename?: 'Trainer';
   id: Scalars['ID']['output'];
@@ -95,18 +105,20 @@ export type AllPokemonsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllPokemonsQuery = { __typename?: 'Query', pokemons: Array<{ __typename?: 'Pokemon', id: string, name: string, image?: string | null }> };
 
+export type StatsFragment = { __typename?: 'PokemonDetails', stats: Array<{ __typename?: 'Stat', id: string, name: string, effort: number, value: number } | null> };
+
 export type AbilitiesFragment = { __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> };
 
-export type DetailsFragment = { __typename?: 'Pokemon', details: { __typename?: 'PokemonDetails', weight: number, height: number, images: Array<string> } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) };
+export type DetailsFragment = { __typename?: 'Pokemon', details: { __typename?: 'PokemonDetails', weight: number, height: number, images: Array<string> } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) & ({ __typename?: 'PokemonDetails', stats: Array<{ __typename?: 'Stat', id: string, name: string, effort: number, value: number } | null> } | { __typename?: 'PokemonDetails', stats?: never }) };
 
-export type PokemonFragment = { __typename?: 'Pokemon', id: string, name: string, image?: string | null } & ({ __typename?: 'Pokemon', details: { __typename?: 'PokemonDetails', weight: number, height: number, images: Array<string> } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) } | { __typename?: 'Pokemon', details?: never });
+export type PokemonFragment = { __typename?: 'Pokemon', id: string, name: string, image?: string | null } & ({ __typename?: 'Pokemon', details: { __typename?: 'PokemonDetails', weight: number, height: number, images: Array<string> } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) & ({ __typename?: 'PokemonDetails', stats: Array<{ __typename?: 'Stat', id: string, name: string, effort: number, value: number } | null> } | { __typename?: 'PokemonDetails', stats?: never }) } | { __typename?: 'Pokemon', details?: never });
 
 export type PokemonQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type PokemonQuery = { __typename?: 'Query', pokemon: { __typename?: 'Pokemon', id: string, name: string, image?: string | null, details: { __typename?: 'PokemonDetails', weight: number, height: number, images: Array<string> } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) } };
+export type PokemonQuery = { __typename?: 'Query', pokemon: { __typename?: 'Pokemon', id: string, name: string, image?: string | null, details: { __typename?: 'PokemonDetails', weight: number, height: number, images: Array<string> } & ({ __typename?: 'PokemonDetails', abilities: Array<{ __typename?: 'Ability', name: string, id: string, effects: Array<string | null> }> } | { __typename?: 'PokemonDetails', abilities?: never }) & ({ __typename?: 'PokemonDetails', stats: Array<{ __typename?: 'Stat', id: string, name: string, effort: number, value: number } | null> } | { __typename?: 'PokemonDetails', stats?: never }) } };
 
 export type PokemonByIdsQueryVariables = Exact<{
   ids: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
@@ -134,6 +146,16 @@ export const AbilitiesFragmentDoc = gql`
   }
 }
     `;
+export const StatsFragmentDoc = gql`
+    fragment Stats on PokemonDetails {
+  stats {
+    id
+    name
+    effort
+    value
+  }
+}
+    `;
 export const DetailsFragmentDoc = gql`
     fragment Details on Pokemon {
   details {
@@ -141,9 +163,11 @@ export const DetailsFragmentDoc = gql`
     height
     images
     ...Abilities @defer
+    ...Stats @defer
   }
 }
-    ${AbilitiesFragmentDoc}`;
+    ${AbilitiesFragmentDoc}
+${StatsFragmentDoc}`;
 export const PokemonFragmentDoc = gql`
     fragment Pokemon on Pokemon {
   id

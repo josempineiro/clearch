@@ -21,3 +21,40 @@ export type ServerContext = {
     abilities: any
   }
 }
+
+export type AbilitiesPokeApiDto = {
+  count: number
+  next: string
+  previous: string
+  results: Array<{
+    name: string
+    url: string
+  }>
+}
+export type AbilityPokeApiDto = {
+  id: number
+  name: string
+  effect_entries: Array<{
+    effect: string
+    language: {
+      name: string
+    }
+  }>
+}
+
+export type PokemonStatPokeApiDto = {
+  base_stat: number
+  effort: number
+  stat: {
+    name: string
+    url: string
+  }
+}
+
+export type StatPokeApiDto = {
+  id: number
+  effort: number
+  characteristics: {
+    url: string
+  }
+}

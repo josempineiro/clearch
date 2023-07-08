@@ -5,7 +5,7 @@ import { readFileSync } from 'fs'
 import Dataloader from 'dataloader'
 import resolvers from './resolvers'
 import type { ServerContext } from './types'
-import { getPokemonsByIds, getAbilitiesByIds } from './poke-api'
+import { getPokemonsByIds, getAbilitiesByIds, getStatsByIds } from './poke-api'
 
 export const typeDefs = readFileSync(
   '/Users/jmpineiro/workspace/dev/leman/clearq/packages/bff-pokemon/src/schema.graphql',
@@ -19,12 +19,9 @@ export const yoga = createYoga<ServerContext>({
   }),
   context: {
     loaders: {
-      pokemons: new Dataloader(async (pokemonIds) => {
-        return await getPokemonsByIds(pokemonIds)
-      }),
-      abilities: new Dataloader(async (abilityIds) => {
-        return await getAbilitiesByIds(abilityIds)
-      }),
+      stats: new Dataloader(async (statIds) => getStatsByIds(statIds)),
+      pokemons: new Dataloader(async (pokemonIds) => getPokemonsByIds(pokemonIds)),
+      abilities: new Dataloader(async (abilityIds: string[]) => getAbilitiesByIds(abilityIds)),
     },
   },
   // eslint-disable-next-line react-hooks/rules-of-hooks

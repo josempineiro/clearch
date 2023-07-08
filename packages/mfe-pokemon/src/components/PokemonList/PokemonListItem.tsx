@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import _ from 'lodash'
 import cn from 'classnames'
-import { ListItem, RenderItemProps, Image, useExpandableItemsContext } from '@clearq/ui'
+import { ListItem, RenderItemProps, Image, useExpandableItemsContext, Tag } from '@clearq/ui'
 import { usePokemonQuery, PokemonNodeFragment } from '../../infrastructure/graphql/generated/graphql'
 import styles from './PokemonListItem.module.css'
 
@@ -19,7 +19,7 @@ export const PokemonListItem = memo(
     return (
       <ListItem
         key={item.id}
-        className={cn([className, styles.item, styles.expanded])}
+        className={cn([className, styles.item, { [styles.expanded]: isExpanded }])}
         onClick={() => {
           expandableItems.toggleItem(item)
         }}
@@ -53,9 +53,36 @@ export const PokemonListItem = memo(
             {data && (
               <div>
                 <div>
-                  {data.pokemon.details?.abilities?.map((ability) => (
-                    <div key={ability.id}>{ability.name}</div>
-                  ))}
+                  <label>
+                    abilities:
+                    {data.pokemon.details?.abilities?.map((ability) => (
+                      <Tag key={ability.id} variant="primary">
+                        {ability.name}
+                      </Tag>
+                    ))}
+                  </label>
+                </div>
+                <div>
+                  <label>
+                    stats:
+                    {data.pokemon.details?.stats?.map((stat) => (
+                      <Tag key={stat.id} variant="primary">
+                        {stat.name} - {stat.value}
+                      </Tag>
+                    ))}
+                  </label>
+                </div>
+                <div>
+                  <label>
+                    height:
+                    <Tag variant="primary">{data.pokemon.details?.height}</Tag>
+                  </label>
+                </div>
+                <div>
+                  <label>
+                    weight:
+                    <Tag variant="primary">{data.pokemon.details?.weight}</Tag>
+                  </label>
                 </div>
               </div>
             )}

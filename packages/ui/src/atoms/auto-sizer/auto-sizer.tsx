@@ -33,7 +33,7 @@ export const AutoSizer = ({ children, className, initialWidth = 0, initialHeight
   }, [])
 
   return (
-    <div className={cn(styles.autoSizer, className)} ref={autoSizerRef} data-height={height}>
+    <div className={cn(styles.autoSizer, className)} ref={autoSizerRef}>
       {height &&
         width &&
         (typeof children === 'function'

@@ -9,11 +9,20 @@ type Ability {
   effects: [String]!
 }
 
+type Stat {
+  id: ID!
+  name: String!
+  value: Int!
+  effort: Int!
+  characteristics: [String!]!
+}
+
 type PokemonDetails {
   height: Int!
   weight: Int!
   abilities: [Ability!]!
   images: [String!]!
+  stats: [Stat!]!
 }
 
 type Pokemon {

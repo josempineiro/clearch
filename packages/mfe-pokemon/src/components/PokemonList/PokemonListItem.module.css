@@ -17,7 +17,8 @@
 }
 
 .item:hover,
-.item:focus {
+.item:focus,
+.expanded {
   z-index: 1;
 }
 

@@ -181,7 +181,7 @@ export function VirtualizedList<TItem>(
               item: data,
               list,
               style: { height: meta.height, top: meta.top },
-              className: styles.virtualizedListItemContent,
+              className: styles.virtualizedListItem,
             })}
           </Fragment>
         ))}
