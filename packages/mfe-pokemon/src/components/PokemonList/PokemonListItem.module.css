@@ -1,6 +1,6 @@
 .item {
   transition: background-color, height, top;
-  transition-duration: 0.6s;
+  transition-duration: 0.2s;
   transition-timing-function: linear;
   overflow: hidden;
   background-color: var(--color-bg);

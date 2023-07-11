@@ -1,14 +1,7 @@
-.container {
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: 100%;
-}
-
 .virtualizedList {
   position: relative;
 }
 
 .virtualizedListItem {
   position: absolute;
-  width: 100%;
 }

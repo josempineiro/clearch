@@ -9,6 +9,12 @@ type Ability {
   effects: [String]!
 }
 
+type Ability {
+  id: ID!
+  name: String!
+  effects: [String]!
+}
+
 type Stat {
   id: ID!
   name: String!

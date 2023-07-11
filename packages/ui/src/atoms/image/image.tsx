@@ -4,8 +4,9 @@ import cn from 'classnames'
 export interface ImageProps extends React.HTMLProps<HTMLImageElement> {
   fallbackSrc?: string
   placeholderSrc?: string
-  height: number | string
+  height?: number | string
   width: number | string
+  aspectRatio?: number
   objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
 }
 
@@ -19,6 +20,7 @@ export const Image = ({
   width,
   src,
   objectFit,
+  aspectRatio,
   ...rest
 }: ImageProps) => {
   const [loading, setLoading] = React.useState(true)
@@ -41,7 +43,7 @@ export const Image = ({
         setError(true)
       }
     },
-    [placeholderSrc],
+    [fallbackSrc, placeholderSrc],
   )
 
   useEffect(() => {
@@ -74,6 +76,7 @@ export const Image = ({
         style={{
           objectFit,
           display: loading ? 'none' : 'block',
+          aspectRatio,
           height,
           width,
         }}

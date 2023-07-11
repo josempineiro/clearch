@@ -1,9 +1,13 @@
+fragment Stat on Stat {
+  id
+  name
+  value
+  characteristics
+}
+
 fragment Stats on PokemonDetails {
   stats {
-    id
-    name
-    effort
-    value
+    ...Stat
   }
 }
 

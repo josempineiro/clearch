@@ -4,6 +4,7 @@ import styles from './scrollable.module.css'
 
 export interface ScrollableProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
+  locked?: boolean
 }
 
 export const Scrollable = forwardRef<HTMLDivElement, ScrollableProps>(function (
@@ -12,7 +13,13 @@ export const Scrollable = forwardRef<HTMLDivElement, ScrollableProps>(function (
 ) {
   const { children, className, ...rest } = props
   return (
-    <div ref={ref} className={cn(styles.scrollable, className)} {...rest}>
+    <div
+      ref={ref}
+      className={cn(styles.scrollable, className, {
+        [styles.locked]: props.locked,
+      })}
+      {...rest}
+    >
       {children}
     </div>
   )

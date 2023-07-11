@@ -1,0 +1,48 @@
+.text {
+  font-family: var(--font-family);
+  transition-property: color, font-size, line-height, font-weight, text-decoration;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+.primary {
+  color: var(--text-color-primary);
+}
+
+.secondary {
+  color: var(--text-color-secondary);
+}
+
+.tertiary {
+  color: var(--text-color-tertiary);
+}
+
+.body {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.title {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.subtitle {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.caption {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.capitalized {
+  text-transform: capitalize;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+.lowercase {
+  text-transform: lowercase;
+}

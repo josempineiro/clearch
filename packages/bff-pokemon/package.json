@@ -18,7 +18,8 @@
     "dataloader": "^2.2.2",
     "graphql": "16.6.0",
     "graphql-fields": "^2.0.3",
-    "graphql-yoga": "4.0.3"
+    "graphql-yoga": "4.0.3",
+    "pino": "^8.14.1"
   },
   "devDependencies": {
     "@types/node": "20.3.2",

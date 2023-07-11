@@ -1,0 +1,95 @@
+.RadarChart {
+  position: relative;
+  width: 100%;
+}
+
+.RadarChart::after {
+  content: '';
+  display: block;
+  padding-bottom: 100%;
+}
+
+.RadarCharArea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  path {
+    stroke-width: 1;
+    transition: 0.2s;
+    fill-opacity: 0.3;
+  }
+}
+
+.RadarChartAxes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.RadarChartAxis {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(var(--axis-angle));
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 1px;
+    transform: translateY(-50%);
+    background: rgb(157, 165, 181);
+  }
+}
+.RadarChartAxisPoint {
+  transform: translate3d(-50%, -50%, 0) rotate(calc(var(--axis-angle) * -1));
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.RadarChartAxisLabel {
+  font-size: 16px;
+  padding: 0 4px;
+  position: absolute;
+  top: var(--label-top);
+  left: var(--label-left);
+  transform: translate3d(var(--label-x), var(--label-y), 0);
+}
+.RadarChartAxisLabel_x_center {
+}
+.RadarChartAxisLabel_x_left {
+  --label-x: -50%;
+}
+.RadarChartAxisLabel_x_right {
+  --label-x: 50%;
+}
+.RadarChartAxisLabel_y_top {
+  --label-y: -50%;
+}
+.RadarChartAxisLabel_y_center {
+  --label-y: 0%;
+}
+.RadarChartAxisLabel_y_bottom {
+  --label-y: 50%;
+}
+
+.RadarChartBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(179, 179, 179, 0.5);
+}

@@ -29,6 +29,15 @@ export const CustomSize = Template.bind({})
 CustomSize.args = {
   src: 'https://placehsold.co/100x200',
   onClick: () => alert('clicking primary'),
-  width: 200,
-  height: 200,
+  width: '100%',
+  aspectRatio: 1,
+}
+
+export const ImageWithAspectRatio = Template.bind({})
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+ImageWithAspectRatio.args = {
+  src: 'https://placehsold.co/100x200',
+  onClick: () => alert('clicking primary'),
+  width: 100,
+  aspectRatio: 1,
 }

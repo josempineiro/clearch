@@ -5,3 +5,15 @@
   display: flex;
   flex-direction: column;
 }
+
+.small {
+  padding: 0 1rem;
+}
+
+.medium {
+  padding: 0 2rem;
+}
+
+.large {
+  padding: 0 3rem;
+}

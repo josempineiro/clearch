@@ -5,3 +5,7 @@
   width: 100%;
   position: relative;
 }
+
+.locked {
+  overflow: hidden;
+}

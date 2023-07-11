@@ -2,7 +2,7 @@ import { PokemonPokeApiDto, PokemonsPokeApiDto, StatPokeApiDto, AbilityPokeApiDt
 
 export async function fetchPokeApi<T>(
   path: string,
-  queryParams: string | string[][] | Record<string, string> | Record<string, string> | URLSearchParams = {},
+  queryParams: string | string[][] | Record<string, string> | Record<string, any> | URLSearchParams = {},
 ): Promise<T> {
   const queryString = new URLSearchParams(queryParams).toString()
   const url = `https://pokeapi.co/api/v2/${path}${queryString ? `?${queryString}` : ''}`
@@ -19,8 +19,8 @@ export async function getPokemons(
   })
 }
 
-export async function getPokemonById(id: string): Promise<PokemonPokeApiDto> {
-  return await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then((res) => res.json())
+export async function getPokemonById(id: string) {
+  return await fetchPokeApi<PokemonPokeApiDto>(`pokemon/${id}`)
 }
 
 export async function getPokemonsByIds(ids): Promise<Array<PokemonPokeApiDto>> {
@@ -32,9 +32,7 @@ export async function getAllAbilities() {
 }
 
 export async function getAbilityById(id: string) {
-  console.log('BFF::Pokemons::getAbilityById', id)
   const ability = await fetchPokeApi<AbilityPokeApiDto>(`ability/${id}`)
-  console.log('BFF::Pokemons::getAbilityById->results', ability.id)
   return ability
 }
 
@@ -43,9 +41,17 @@ export async function getAbilitiesByIds(ids: Array<string>) {
 }
 
 export async function getStatById(id: string) {
-  return await fetchPokeApi<StatPokeApiDto>(`ability/${id}`)
+  return await fetchPokeApi<StatPokeApiDto>(`stat/${id}`)
 }
 
 export async function getStatsByIds(ids): Promise<Array<any>> {
   return await Promise.all(ids.map((id) => getStatById(id)))
+}
+
+export async function getCharacteristicById(id: string) {
+  return await fetchPokeApi<StatPokeApiDto>(`characteristic/${id}`)
+}
+
+export async function getCharacteristicsByIds(ids: Array<string>) {
+  return await Promise.all(ids.map((id) => getCharacteristicById(id)))
 }

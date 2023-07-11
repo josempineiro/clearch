@@ -1,0 +1,5 @@
+.tooltip {
+  background-color: var(--tooltip-bg-color);
+  color: var(--tooltip-text-color);
+  border: 1px solid var(--tooltip-border-color);
+}

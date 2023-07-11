@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useRef, Fragment } from 'react'
 import { List, ListProps, ListItemProps } from '@/atoms/list'
-import { Scrollable } from '@/atoms/scrollable'
+import { Scrollable, ScrollableProps } from '@/atoms/scrollable'
 import styles from './virtualized-list.module.css'
 
 export type VirtualizedListState = {
@@ -13,7 +13,7 @@ export interface RenderItemProps<TItem> extends Omit<ListItemProps, 'children'> 
   list: VirtualizedListRef<TItem>
 }
 
-export interface VirtualizedListProps<TItem> extends Omit<ListProps, 'children'> {
+export interface VirtualizedListProps<TItem> extends Omit<ListProps, 'children'>, Pick<ScrollableProps, 'locked'> {
   height: number
   items: Array<TItem>
   threshold?: number
@@ -54,6 +54,7 @@ export function VirtualizedList<TItem>(
     onVisibleItemsChange,
     getItemHeight,
     height,
+    locked,
     ...rest
   }: VirtualizedListProps<TItem>,
   ref?: React.Ref<VirtualizedListRef<TItem>>,
@@ -164,8 +165,8 @@ export function VirtualizedList<TItem>(
       style={{
         height,
       }}
-      className={styles.container}
       onScroll={handleScroll}
+      locked={locked}
     >
       <List
         {...rest}

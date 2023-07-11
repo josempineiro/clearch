@@ -11,9 +11,31 @@
   --color-bg-hover: #2e2e4e;
   --color-bg-focus: #3a3c64;
 
+  --layout-bg-color: #1a1a1a;
+
   --header-height: 64px;
+
+  --text-color-primary: #ffffff;
+  --text-color-secondary: #ddd;
+  --text-color-tertiary: #a1a1a1;
+
+  --tooltip-bg-color: #a2a2ff;
+  --tooltip-text-color: #ffffff;
+  --tooltip-border-color: #646cff;
 }
 
 body {
   font-family: var(--font-family);
+}
+
+/* RESET */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
 }
