@@ -7,7 +7,7 @@ export interface ListItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
 
 export const ListItem: React.FC<ListItemProps> = ({ children, className, ...rest }) => {
   return (
-    <li className={cn(styles.listItem, className)} {...rest}>
+    <li className={cn(styles['list-item'], className)} {...rest}>
       {children}
     </li>
   )

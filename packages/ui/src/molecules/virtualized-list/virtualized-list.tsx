@@ -170,7 +170,7 @@ export function VirtualizedList<TItem>(
     >
       <List
         {...rest}
-        className={styles.virtualizedList}
+        className={styles['virtualized-list']}
         style={{
           ...rest.style,
           height: items.reduce((acc, item) => acc + getItemHeight(item, state), 0),
@@ -182,7 +182,7 @@ export function VirtualizedList<TItem>(
               item: data,
               list,
               style: { height: meta.height, top: meta.top },
-              className: styles.virtualizedListItem,
+              className: styles['item'],
             })}
           </Fragment>
         ))}

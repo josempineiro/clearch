@@ -1,12 +1,12 @@
 import './App.css'
 import Pokemons from './modules/Pokemons'
 import { BrowserRouter } from 'react-router-dom'
-import { Layout, Header } from '@clearq/ui'
+import { Layout, Text } from '@clearq/ui'
 
 function App() {
   return (
     <BrowserRouter basename="/pokemons">
-      <Layout header={<Header>Microfrontend</Header>}>
+      <Layout header={<Text>Microfrontend</Text>}>
         <Pokemons />
       </Layout>
     </BrowserRouter>

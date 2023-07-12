@@ -1,19 +1,110 @@
 .container {
+  transition-property: padding, background-color, border-color;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
+}
+
+.w-full {
   width: 100%;
+}
+
+.h-full {
   height: 100%;
-  flex: 1 1 100%;
-  display: flex;
-  flex-direction: column;
 }
 
-.small {
-  padding: 0 1rem;
+.bg-primary {
+  background-color: var(--color-primary);
 }
 
-.medium {
-  padding: 0 2rem;
+.bg-secondary {
+  background-color: var(--color-secondary);
 }
 
-.large {
-  padding: 0 3rem;
+.bg-tertiary {
+  background-color: var(--color-tertiary);
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.border {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.border-primary {
+  border-color: var(--color-primary);
+}
+
+.border-secondary {
+  border-color: var(--color-secondary);
+}
+
+.border-tertiary {
+  border-color: var(--color-tertiary);
+}
+
+.border-transparent {
+  border-color: transparent;
+}
+
+.p-xs {
+  padding: 0.5rem;
+}
+
+.p-s {
+  padding: 1rem;
+}
+
+.p-m {
+  padding: 2rem;
+}
+
+.p-l {
+  padding: 3rem;
+}
+
+.p-xl {
+  padding: 4rem;
+}
+
+.px-s {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.px-m {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.px-l {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.px-xl {
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+.py-s {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py-m {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.py-l {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.py-xl {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }

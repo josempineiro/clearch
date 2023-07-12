@@ -1,4 +1,6 @@
 import { useState, useEffect, cloneElement, useRef } from 'react'
+import { createPortal } from 'react-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import styles from './tooltip.module.css'
 
 export interface TooltipProps {
@@ -30,10 +32,16 @@ export function Tooltip({ children, target, trigger = 'click' }: TooltipProps) {
 
   useEffect(() => {
     if (visible && targetRef.current && tooltipRef.current) {
-      console.log(targetRef.current)
+      const { top, left, height } = targetRef.current.getBoundingClientRect()
       tooltipRef.current.focus()
-      tooltipRef.current.style.setProperty('top', `${targetRef.current.offsetTop + targetRef.current.offsetHeight}px`)
-      tooltipRef.current.style.setProperty('left', `${targetRef.current.offsetLeft}px`)
+      tooltipRef.current.style.setProperty(
+        'top',
+        `${Math.min(top + height, Math.max(0, window.innerHeight - tooltipRef.current.offsetHeight))}px`,
+      )
+      tooltipRef.current.style.setProperty(
+        'left',
+        `${Math.min(left, Math.max(0, window.innerWidth - tooltipRef.current.offsetWidth))}px`,
+      )
     }
   }, [visible])
 
@@ -63,19 +71,28 @@ export function Tooltip({ children, target, trigger = 'click' }: TooltipProps) {
         onMouseLeave: handleMouseLeave,
         onMouseDown: handleMouseDown,
       })}
-      <div
-        className={styles.tooltip}
-        ref={tooltipRef}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          position: 'absolute',
-          zIndex: 1,
-          display: visible ? 'block' : 'none',
-        }}
-      >
-        {children}
-      </div>
+      {createPortal(
+        <AnimatePresence>
+          {visible && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className={styles.tooltip}
+              ref={tooltipRef}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              style={{
+                position: 'absolute',
+                zIndex: 1,
+              }}
+            >
+              {children}
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body!,
+      )}
     </>
   )
 }

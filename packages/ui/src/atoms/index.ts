@@ -1,6 +1,7 @@
 export * from './auto-sizer'
 export * from './button'
 export * from './container'
+export * from './flex-box'
 export * from './header'
 export * from './image'
 export * from './list'

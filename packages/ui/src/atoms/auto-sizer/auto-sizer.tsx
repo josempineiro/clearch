@@ -1,19 +1,20 @@
 import React from 'react'
 import cn from 'classnames'
 import styles from './auto-sizer.module.css'
+import { Container, ContainerProps } from '@/atoms/container'
 
 export interface AutoSizerChildrenProps {
   width: number
   height: number
 }
 
-export interface AutoSizerProps extends Omit<React.HTMLProps<HTMLDivElement>, 'children'> {
+export interface AutoSizerProps extends Omit<ContainerProps, 'children'> {
   children: React.ReactElement | (({ width, height }: AutoSizerChildrenProps) => React.ReactNode)
   initialWidth?: number
   initialHeight?: number
 }
 
-export const AutoSizer = ({ children, className, initialWidth = 0, initialHeight = 0 }: AutoSizerProps) => {
+export const AutoSizer = ({ children, className, initialWidth = 0, initialHeight = 0, ...rest }: AutoSizerProps) => {
   const autoSizerRef = React.useRef<HTMLDivElement>(null)
   const [width, setWidth] = React.useState(initialWidth)
   const [height, setHeight] = React.useState(initialHeight)
@@ -21,9 +22,11 @@ export const AutoSizer = ({ children, className, initialWidth = 0, initialHeight
   React.useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect
+      debugger
       setWidth(width)
       setHeight(height)
     })
+    debugger
     if (autoSizerRef.current) {
       resizeObserver.observe(autoSizerRef.current)
     }
@@ -33,13 +36,13 @@ export const AutoSizer = ({ children, className, initialWidth = 0, initialHeight
   }, [])
 
   return (
-    <div className={cn(styles.autoSizer, className)} ref={autoSizerRef}>
+    <Container className={cn(styles['auto-sizer'], className)} ref={autoSizerRef} width="full" height="full" {...rest}>
       {height &&
         width &&
         (typeof children === 'function'
           ? children({ width, height })
           : React.cloneElement(children as React.ReactElement, { width, height }))}
-    </div>
+    </Container>
   )
 }
 

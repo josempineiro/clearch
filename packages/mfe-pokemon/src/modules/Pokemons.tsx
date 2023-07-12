@@ -24,7 +24,7 @@ const Pokemons = () => {
   return (
     <ApolloProvider client={client}>
       <Routes>
-        <Route path={'/:id?'} element={<PokemonsPage />} />
+        <Route path={'/:id?/:tab?'} element={<PokemonsPage />} />
         <Route element={<NotFound />} />
       </Routes>
     </ApolloProvider>

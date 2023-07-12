@@ -8,6 +8,7 @@ export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
   color?: 'primary' | 'secondary' | 'tertiary'
   variant?: 'title' | 'subtitle' | 'body' | 'caption'
   transform?: 'uppercase' | 'lowercase' | 'capitalize' | 'normal-case'
+  whiteSpace?: 'normal' | 'nowrap' | 'pre' | 'pre-line' | 'pre-wrap' | 'break-spaces'
 }
 
 export const Text = forwardRef<HTMLSpanElement, TextProps>(
@@ -18,7 +19,8 @@ export const Text = forwardRef<HTMLSpanElement, TextProps>(
       variant = 'body',
       Element = 'span',
       color = 'secondary',
-      transform = 'normal-case',
+      transform,
+      whiteSpace = 'normal',
       ...rest
     }: TextProps,
     ref?: ForwardedRef<HTMLSpanElement>,
@@ -29,7 +31,8 @@ export const Text = forwardRef<HTMLSpanElement, TextProps>(
         className={cn(className, styles.text, {
           [styles[variant]]: true,
           [styles[color]]: true,
-          [styles[transform]]: true,
+          [styles[whiteSpace]]: true,
+          ...(transform && { [styles[transform]]: Boolean(transform) }),
         })}
         {...rest}
       >

@@ -13,6 +13,13 @@ const app = async (): Promise<UserConfigExport> => {
       }),
     ],
     css: {
+      modules: {
+        generateScopedName: (name, filename, css) => {
+          const component = filename.split(/\//g).reverse()[0].split('.')[0]
+          console.log(['ui', [...new Set([component, name])].join('_')].join('-'))
+          return ['ui', [...new Set([component, name])].join('_')].join('-')
+        },
+      },
       postcss: {
         plugins: [],
       },
