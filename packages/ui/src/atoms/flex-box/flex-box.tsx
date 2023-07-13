@@ -8,6 +8,7 @@ export interface FlexBoxProps extends ContainerProps {
   justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch'
   flexWrap?: 'nowrap' | 'wrap' | 'wrap-reverse'
+  gap?: 'none' | 'xs' | 's' | 'm' | 'l' | 'xl'
 }
 
 export interface FlexItemProps extends FlexBoxProps {
@@ -27,6 +28,7 @@ export const FlexBox = forwardRef<HTMLDivElement, FlexBoxProps>(
       alignItems = 'stretch',
       flexWrap = 'nowrap',
       children,
+      gap,
       className,
       ...rest
     },
@@ -42,6 +44,7 @@ export const FlexBox = forwardRef<HTMLDivElement, FlexBoxProps>(
           styles[direction],
           styles[`justify-${justifyContent}`],
           styles[`align-${alignItems}`],
+          styles[`gap-${gap}`],
           styles[flexWrap],
         ])}
       >

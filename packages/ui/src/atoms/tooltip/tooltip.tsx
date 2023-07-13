@@ -7,9 +7,10 @@ export interface TooltipProps {
   children: React.ReactNode
   target: React.ReactElement
   trigger?: 'click' | 'hover'
+  width?: 's' | 'm' | 'l' | 'target' | 'content'
 }
 
-export function Tooltip({ children, target, trigger = 'click' }: TooltipProps) {
+export function Tooltip({ children, target, trigger = 'click', width = 'content' }: TooltipProps) {
   const [visible, setVisible] = useState<boolean>(false)
   const targetRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
@@ -32,18 +33,37 @@ export function Tooltip({ children, target, trigger = 'click' }: TooltipProps) {
 
   useEffect(() => {
     if (visible && targetRef.current && tooltipRef.current) {
-      const { top, left, height } = targetRef.current.getBoundingClientRect()
+      const targetRect = targetRef.current.getBoundingClientRect()
+      const tooltipRect = tooltipRef.current.getBoundingClientRect()
+      const tooltipWidth = (() => {
+        switch (width) {
+          case 'content':
+            return tooltipRect.width
+          case 'target':
+            return targetRef.current.offsetWidth
+          case 's':
+            return 200
+          case 'm':
+            return 300
+          case 'l':
+            return 400
+        }
+      })()
       tooltipRef.current.focus()
       tooltipRef.current.style.setProperty(
         'top',
-        `${Math.min(top + height, Math.max(0, window.innerHeight - tooltipRef.current.offsetHeight))}px`,
+        `${Math.min(
+          targetRect.top + targetRect.height,
+          Math.max(0, window.innerHeight - tooltipRef.current.offsetHeight),
+        )}px`,
       )
       tooltipRef.current.style.setProperty(
         'left',
-        `${Math.min(left, Math.max(0, window.innerWidth - tooltipRef.current.offsetWidth))}px`,
+        `${Math.min(targetRect.left, Math.max(0, window.innerWidth - tooltipWidth))}px`,
       )
+      tooltipRef.current.style.setProperty('width', `${tooltipWidth}px`)
     }
-  }, [visible])
+  }, [visible, width])
 
   useEffect(() => {
     if (visible && trigger === 'click') {

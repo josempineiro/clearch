@@ -81,3 +81,23 @@
 .wrap-reverse {
   flex-wrap: wrap-reverse;
 }
+
+.gap-xs {
+  gap: 0.5rem;
+}
+
+.gap-s {
+  gap: 1rem;
+}
+
+.gap-m {
+  gap: 2rem;
+}
+
+.gap-l {
+  gap: 3rem;
+}
+
+.gap-xl {
+  gap: 4rem;
+}

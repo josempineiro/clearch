@@ -57,6 +57,7 @@ export function TabItems({ children, className, ...rest }: React.HTMLAttributes<
     </ul>
   )
 }
+
 export function Tabs({ children, tabs, className, active, onChange = () => undefined, ...rest }: TabsProps) {
   return (
     <TabsContext.Provider
