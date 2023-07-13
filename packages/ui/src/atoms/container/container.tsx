@@ -2,9 +2,9 @@ import React, { forwardRef } from 'react'
 import cn from 'classnames'
 import styles from './container.module.css'
 
-type Padding = '0' | 'xs' | 's' | 'm' | 'l' | 'xl'
+type Padding = 'none' | 'xs' | 's' | 'm' | 'l' | 'xl'
 
-export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContainerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   children: React.ReactNode
   padding?: Padding | [Padding, Padding]
   variant?: 'filled' | 'outlined' | 'none'
@@ -15,7 +15,6 @@ export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Container = forwardRef<HTMLDivElement, ContainerProps>(
   ({ className, padding, variant = 'none', color = 'none', width, height, ...rest }, ref) => {
-    console.log(padding)
     return (
       <div
         ref={ref}

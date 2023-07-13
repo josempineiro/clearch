@@ -1,7 +1,6 @@
-import React, { createContext } from 'react'
+import React, { forwardRef, createContext } from 'react'
 import cn from 'classnames'
 import styles from './tabs.module.css'
-import { AnimatePresence } from 'framer-motion'
 
 export interface TabsProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onChange'> {
   children: React.ReactNode
@@ -33,20 +32,23 @@ export function useTabsContext() {
   return context
 }
 
-export function TabItem({ children, className, id, ...rest }: TabItemProps) {
+export const TabItem = forwardRef<HTMLLIElement, TabItemProps>(({ children, className, id, ...rest }, ref) => {
   const { active, onChange } = useTabsContext()
   return (
     <li
+      ref={ref}
       className={cn(styles.tab, className, { [styles.active]: active === id })}
       onClick={() => {
-        onChange(id)
+        if (active !== id) {
+          onChange(id)
+        }
       }}
       {...rest}
     >
       {children}
     </li>
   )
-}
+})
 
 export function TabItems({ children, className, ...rest }: React.HTMLAttributes<HTMLUListElement>) {
   return (
@@ -63,10 +65,12 @@ export function Tabs({ children, tabs, className, active, onChange = () => undef
         onChange,
       }}
     >
-      <nav className={cn(styles.tabsNav, className)} {...rest}>
-        {tabs}
-      </nav>
-      <AnimatePresence exitBeforeEnter>{children}</AnimatePresence>
+      <div>
+        <nav className={cn(styles['tabs-nav'], className)} {...rest}>
+          {tabs}
+        </nav>
+        <section>{children}</section>
+      </div>
     </TabsContext.Provider>
   )
 }

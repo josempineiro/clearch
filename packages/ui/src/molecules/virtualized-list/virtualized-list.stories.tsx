@@ -2,7 +2,7 @@ import React from 'react'
 import { ForwardedVirtualizedList as VirtualizedListComponent, VirtualizedListProps } from './virtualized-list'
 import { Meta } from '@storybook/react'
 import type { StoryFn } from '@storybook/react'
-import { ListItem } from '@clearq/ui'
+import { ListItem } from '@/atoms/list'
 
 interface TestItem {
   title: string

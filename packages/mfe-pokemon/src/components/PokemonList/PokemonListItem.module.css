@@ -1,6 +1,6 @@
 .item {
   transition: background-color, height, top;
-  transition-duration: 0.2s;
+  transition-duration: 0.3s;
   transition-timing-function: linear;
   overflow: hidden;
   background-color: var(--color-bg);
@@ -69,7 +69,7 @@
   border-bottom: 2px solid transparent;
   cursor: pointer;
   transition: border-color;
-  transition-duration: 0.2s;
+  transition-duration: 0.3s;
   transition-timing-function: linear;
 }
 

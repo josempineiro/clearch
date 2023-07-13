@@ -1,13 +1,14 @@
 import cn from 'classnames'
-import styles from './RadarChart.module.css'
-import { Tooltip } from '@clearq/ui'
+import { Tooltip } from '@/atoms/tooltip'
+import styles from './radar-chart.module.css'
+
 export interface RadarData {
   value: number
   label: React.ReactNode
   description: React.ReactNode
 }
 
-function RadarChart({ dataset }: { dataset: Array<RadarData> }) {
+export function RadarChart({ dataset }: { dataset: Array<RadarData> }) {
   const indexXPosition = (index: number) => {
     const indexCos = Math.round((Math.cos(((2 * Math.PI) / dataset.length) * index) + Number.EPSILON) * 100) / 100
     if (indexCos === 0) {
@@ -106,7 +107,3 @@ function RadarChart({ dataset }: { dataset: Array<RadarData> }) {
     </div>
   )
 }
-
-export default RadarChart
-
-// Estilos en archivo CSS aparte

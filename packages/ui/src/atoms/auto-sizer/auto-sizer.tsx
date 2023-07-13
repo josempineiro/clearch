@@ -22,11 +22,9 @@ export const AutoSizer = ({ children, className, initialWidth = 0, initialHeight
   React.useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect
-      debugger
       setWidth(width)
       setHeight(height)
     })
-    debugger
     if (autoSizerRef.current) {
       resizeObserver.observe(autoSizerRef.current)
     }
@@ -37,8 +35,8 @@ export const AutoSizer = ({ children, className, initialWidth = 0, initialHeight
 
   return (
     <Container className={cn(styles['auto-sizer'], className)} ref={autoSizerRef} width="full" height="full" {...rest}>
-      {height &&
-        width &&
+      {height > 0 &&
+        width > 0 &&
         (typeof children === 'function'
           ? children({ width, height })
           : React.cloneElement(children as React.ReactElement, { width, height }))}

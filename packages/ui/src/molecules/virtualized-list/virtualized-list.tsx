@@ -8,12 +8,19 @@ export type VirtualizedListState = {
   height: number
 }
 
-export interface RenderItemProps<TItem> extends Omit<ListItemProps, 'children'> {
+export interface RenderItemProps<TItem> extends Omit<ListItemProps, 'children' | 'style' | 'className'> {
   item: TItem
   list: VirtualizedListRef<TItem>
+  style: {
+    height: number
+    top: number
+  }
+  className: string
 }
 
-export interface VirtualizedListProps<TItem> extends Omit<ListProps, 'children'>, Pick<ScrollableProps, 'locked'> {
+export interface VirtualizedListProps<TItem>
+  extends Omit<ListProps, 'children' | 'ref'>,
+    Pick<ScrollableProps, 'locked'> {
   height: number
   items: Array<TItem>
   threshold?: number

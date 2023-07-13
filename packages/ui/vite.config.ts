@@ -16,7 +16,6 @@ const app = async (): Promise<UserConfigExport> => {
       modules: {
         generateScopedName: (name, filename, css) => {
           const component = filename.split(/\//g).reverse()[0].split('.')[0]
-          console.log(['ui', [...new Set([component, name])].join('_')].join('-'))
           return ['ui', [...new Set([component, name])].join('_')].join('-')
         },
       },
@@ -42,12 +41,9 @@ const app = async (): Promise<UserConfigExport> => {
       },
     },
     resolve: {
-      alias: [
-        {
-          find: /^@\/(.*)/,
-          replacement: '/src/$1',
-        },
-      ],
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
     },
     test: {
       globals: true,

@@ -12,6 +12,7 @@ export interface LayoutProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Layout: React.FC<LayoutProps> = ({ children, className, header }) => {
   return (
     <FlexBox
+      direction="column"
       className={cn(className, styles.layout, {
         [styles['with-header']]: Boolean(header),
       })}

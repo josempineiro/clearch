@@ -1,87 +1,30 @@
-import React, { memo, createContext } from 'react'
+import React, { memo } from 'react'
 import _ from 'lodash'
 import cn from 'classnames'
+import { Routes, Route, useParams, useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   ListItem,
   RenderItemProps,
   Image,
   Button,
   useExpandableItemsContext,
-  Tag,
   Container,
-  List,
   Text,
-  Tooltip,
+  Tabs,
+  TabItem,
+  TabItems,
 } from '@clearq/ui'
-import { usePokemonQuery, PokemonNodeFragment } from '../../infrastructure/graphql/generated/graphql'
+import { usePokemonQuery, PokemonNodeFragment } from '@/infrastructure/graphql/generated/graphql'
+import { PokemonInfo } from '@/components/PokemonInfo'
+import { PokemonStats } from '@/components/PokemonStats'
 import styles from './PokemonListItem.module.css'
-import { useParams, useNavigate } from 'react-router-dom'
-import { Routes, Route } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
-import { StatsChart } from '../StatsChart/'
-interface TabsProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onChange'> {
-  children: React.ReactNode
-  active?: string
-  onChange: (id: string) => void
-}
 
-export interface TabItemProps extends React.HTMLAttributes<HTMLLIElement> {
-  children: React.ReactNode
-  id: string
-}
-
-interface TabsContextValue {
-  active?: string
-  onChange: (id: string) => void
-}
-
-const TabsContext = createContext<TabsContextValue>({
-  active: undefined,
-  onChange: () => undefined,
-})
-
-export function useTabsContext() {
-  const context = React.useContext(TabsContext)
-  if (context === undefined) {
-    throw new Error('useTabsContext must be used within a Tabs')
-  }
-  return context as TabsContextValue
-}
-
-export function TabItem({ children, className, id, ...rest }: TabItemProps) {
-  const { active, onChange } = useTabsContext()
+const TransitionRoute = ({ children }: { children: React.ReactNode }) => {
   return (
-    <li
-      className={cn(styles.tab, className, { [styles.active]: active === id })}
-      onClick={() => {
-        onChange(id)
-      }}
-      {...rest}
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
       {children}
-    </li>
-  )
-}
-
-export function TabItems({ children, className, ...rest }: React.HTMLAttributes<HTMLUListElement>) {
-  return (
-    <ul className={cn(styles.tabItems, className)} {...rest}>
-      {children}
-    </ul>
-  )
-}
-export function Tabs({ children, className, active, onChange = () => undefined, ...rest }: TabsProps) {
-  return (
-    <TabsContext.Provider
-      value={{
-        active,
-        onChange,
-      }}
-    >
-      <nav className={cn(styles.tabsNav, className)} {...rest}>
-        {children}
-      </nav>
-    </TabsContext.Provider>
+    </motion.div>
   )
 }
 
@@ -107,7 +50,6 @@ export const PokemonListItem = memo(
             expandableItems.toggleItem(item)
           }
         }}
-        tabIndex={-1}
         {...rest}
         style={{
           ...style,
@@ -151,64 +93,47 @@ export const PokemonListItem = memo(
             {data && (
               <>
                 <Tabs
-                  active={params.tab}
+                  tabs={
+                    <TabItems>
+                      <TabItem id="info">About</TabItem>
+                      <TabItem id="stats">Stats</TabItem>
+                      <TabItem id="moves">Moves</TabItem>
+                    </TabItems>
+                  }
+                  active={params['*'] || 'info'}
                   onChange={(tab) => {
-                    console.log(tab)
                     navigate(`/${item.id}/${tab}`)
                   }}
                 >
-                  <TabItems>
-                    <TabItem id="about">About</TabItem>
-                    <TabItem id="stats">Stats</TabItem>
-                    <Tooltip trigger="hover" target={<TabItem id="moves">Moves</TabItem>}>
-                      <List direction="row">
-                        <ListItem>Coming soon</ListItem>
-                      </List>
-                    </Tooltip>
-                  </TabItems>
+                  <AnimatePresence mode="wait">
+                    <Routes>
+                      <Route
+                        path={`/:tab?`}
+                        Component={() => (
+                          <TransitionRoute key="1">
+                            <PokemonInfo pokemon={data.pokemon} />
+                          </TransitionRoute>
+                        )}
+                      />
+                      <Route
+                        path={`stats`}
+                        Component={() => (
+                          <TransitionRoute key="2">
+                            {data.pokemon.details?.stats && <PokemonStats stats={data.pokemon.details.stats} />}
+                          </TransitionRoute>
+                        )}
+                      />
+                      <Route
+                        path={`moves`}
+                        Component={() => (
+                          <TransitionRoute key="3">
+                            <Container padding={['m', 'none']}>COMING SOON!</Container>
+                          </TransitionRoute>
+                        )}
+                      />
+                    </Routes>
+                  </AnimatePresence>
                 </Tabs>
-                <AnimatePresence>
-                  <Routes>
-                    <Route path={`/about`} element={<div>Moves</div>} />
-                    <Route path={`/:id/about`} element={<div>Stats</div>} />
-                    <Route path={`/pokemons/:id/about`} element={<div>About</div>} />
-                  </Routes>
-                </AnimatePresence>
-                <Container padding={['m', '0']}>
-                  <Text transform="capitalize">abilities:</Text>
-                  <List direction="row">
-                    {data.pokemon.details?.abilities?.map((ability) => (
-                      <Tooltip
-                        key={ability.id}
-                        trigger="hover"
-                        target={
-                          <Tag key={ability.id} variant="primary">
-                            {ability.name}
-                          </Tag>
-                        }
-                      >
-                        <List>
-                          {ability.effects.map((effect) => (
-                            <ListItem key={effect}>{effect}</ListItem>
-                          ))}
-                        </List>
-                      </Tooltip>
-                    ))}
-                  </List>
-                </Container>
-                <>
-                  <Container padding="xl">
-                    {data.pokemon.details?.stats && <StatsChart stats={data.pokemon.details.stats} />}
-                  </Container>
-                </>
-                <>
-                  <Text transform="capitalize">height:</Text>
-                  <Tag variant="primary">{data.pokemon.details?.height}</Tag>
-                </>
-                <>
-                  <Text transform="capitalize">weight:</Text>
-                  <Tag variant="primary">{data.pokemon.details?.weight}</Tag>
-                </>
               </>
             )}
           </>

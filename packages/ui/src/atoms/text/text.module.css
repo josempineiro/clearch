@@ -1,7 +1,7 @@
 .text {
   font-family: var(--font-family);
   transition-property: color, font-size, line-height, font-weight, text-decoration;
-  transition-duration: 0.2s;
+  transition-duration: 0.3s;
   transition-timing-function: ease-in-out;
 }
 

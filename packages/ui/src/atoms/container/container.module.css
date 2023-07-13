@@ -1,6 +1,6 @@
 .container {
   transition-property: padding, background-color, border-color;
-  transition-duration: 0.2s;
+  transition-duration: 0.3s;
   transition-timing-function: linear;
 }
 

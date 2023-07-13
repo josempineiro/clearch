@@ -8,15 +8,14 @@ export interface ScrollableProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Scrollable = forwardRef<HTMLDivElement, ScrollableProps>(function (
-  props: ScrollableProps,
+  { children, className, locked, ...rest }: ScrollableProps,
   ref?: React.ForwardedRef<HTMLDivElement>,
 ) {
-  const { children, className, ...rest } = props
   return (
     <div
       ref={ref}
       className={cn(styles.scrollable, className, {
-        [styles.locked]: props.locked,
+        [styles.locked]: locked,
       })}
       {...rest}
     >

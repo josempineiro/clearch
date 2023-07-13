@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import * as path from 'node:path'
 import react from '@vitejs/plugin-react'
 import federation from '@originjs/vite-plugin-federation'
 
@@ -11,7 +12,6 @@ export default defineConfig({
       filename: 'remotePokemon.js',
       exposes: {
         './Pokemons': './src/modules/Pokemons',
-        './PokemonDetails': './src/components/PokemonDetails/PokemonDetails',
       },
       shared: ['react', 'react-dom', 'react-router-dom'],
     }),
@@ -21,6 +21,11 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
     cssCodeSplit: false,
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
   },
   server: {
     host: true,
