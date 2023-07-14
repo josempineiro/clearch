@@ -90,7 +90,7 @@ export async function pokemonsConnetionPageInfo(parent, { first, after }) {
 
 export async function allPokemons(parent, args, context, info) {
   console.log('Resolvers::allPokemons')
-  const pokemons = await getPokemons({ limit: '-1' }).then((pokemons) => pokemonsDtoToPokemons(pokemons))
+  const pokemons = await getPokemons({ limit: '151' }).then((pokemons) => pokemonsDtoToPokemons(pokemons))
   if (Object.keys(graphqlFields(info)).every((field) => ['id', 'name', 'image'].indexOf(field) !== -1)) {
     console.log('Resolvers::allPokemons::base')
     return pokemons
@@ -105,7 +105,7 @@ export async function pokemonsByIds(parent, { ids }, context, info) {
   console.log('Resolvers::pokemonsByIds', { ids })
   if (Object.keys(graphqlFields(info)).every((field) => ['id', 'name'].indexOf(field) !== -1)) {
     console.log('Resolvers::pokemonsByIds::base', { ids })
-    return getPokemons({ limit: '-1' }).then((pokemons) =>
+    return getPokemons({ limit: '151' }).then((pokemons) =>
       pokemonsDtoToPokemons(pokemons).filter((pokemon) => ids.indexOf(pokemon.id) !== -1),
     )
   }

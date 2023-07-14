@@ -1,4 +1,7 @@
+import pino from 'pino'
 import { PokemonPokeApiDto, PokemonsPokeApiDto, StatPokeApiDto, AbilityPokeApiDto, AbilitiesPokeApiDto } from '../types'
+
+const logger = pino({ name: 'BFF::PokeApi' })
 
 export async function fetchPokeApi<T>(
   path: string,
@@ -6,13 +9,19 @@ export async function fetchPokeApi<T>(
 ): Promise<T> {
   const queryString = new URLSearchParams(queryParams).toString()
   const url = `https://pokeapi.co/api/v2/${path}${queryString ? `?${queryString}` : ''}`
-  console.log('BFF::Pokemons::fetchPokeApi', url)
+  logger.debug(`fetchPokeApi->${url}`)
   return (await fetch(url).then((res) => res.json())) as T
 }
 
 export async function getPokemons(
-  { limit = '-1', offset = '0' } = { limit: '-1', offset: '0' },
+  { limit = '151', offset = '0' } = { limit: '151', offset: '0' },
 ): Promise<PokemonsPokeApiDto> {
+  logger.debug(
+    `getPokemons->${{
+      limit,
+      offset,
+    }}`,
+  )
   return await fetchPokeApi<PokemonsPokeApiDto>(`pokemon`, {
     limit,
     offset,
@@ -20,6 +29,7 @@ export async function getPokemons(
 }
 
 export async function getPokemonById(id: string) {
+  logger.debug(`getPokemonById->${id}`)
   return await fetchPokeApi<PokemonPokeApiDto>(`pokemon/${id}`)
 }
 
