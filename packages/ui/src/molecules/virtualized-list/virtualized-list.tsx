@@ -18,6 +18,12 @@ export interface RenderItemProps<TItem> extends Omit<ListItemProps, 'children' |
   className: string
 }
 
+export type ScrollPosition = 'start' | 'center' | 'end'
+export interface ScrollToOptions {
+  behavior?: ScrollBehavior
+  position?: ScrollPosition
+}
+
 export interface VirtualizedListProps<TItem>
   extends Omit<ListProps, 'children' | 'ref'>,
     Pick<ScrollableProps, 'locked'> {
@@ -42,9 +48,9 @@ export interface VirtualizedItem<TItem> {
 }
 
 export type VirtualizedListApi<TItem> = {
-  scrollToTop: () => void
-  scrollToItem: (item: TItem) => void
-  scrollToPosition: (position: number) => void
+  scrollToTop: (options?: Omit<ScrollToOptions, 'position'>) => void
+  scrollToItem: (item: TItem, options?: ScrollToOptions) => void
+  scrollToPosition: (position: number, options?: Omit<ScrollToOptions, 'position'>) => void
 }
 
 export type VirtualizedListRef<TItem> = {
@@ -120,25 +126,42 @@ export function VirtualizedList<TItem>(
     }
   }, [])
 
+  const scrollItemPositionToScrollTop = useCallback(
+    (item: TItem, position: ScrollPosition) => {
+      const virtualizedItem = virtualizedItems[items.indexOf(item)]
+      switch (position) {
+        case 'start':
+          return virtualizedItem.meta.top
+        case 'center':
+          return virtualizedItem.meta.top - height / 2 + virtualizedItem.meta.height / 2
+        case 'end':
+          return virtualizedItem.meta.top - height + virtualizedItem.meta.height
+      }
+    },
+    [height, items, virtualizedItems],
+  )
+
   const scrollToTop = useCallback(
-    (behavior: ScrollBehavior = 'smooth') => {
+    ({ behavior = 'smooth' }: Omit<ScrollToOptions, 'position'> = { behavior: 'smooth' }) => {
       scrollTo({ top: 0, behavior })
     },
     [scrollTo],
   )
 
   const scrollToItem = useCallback(
-    (item: TItem, behavior: ScrollBehavior = 'smooth') => {
+    (
+      item: TItem,
+      { behavior = 'smooth', position = 'start' }: ScrollToOptions = { behavior: 'smooth', position: 'start' },
+    ) => {
       if (scrollRef.current) {
-        const virtualizedItem = virtualizedItems[items.indexOf(item)]
-        scrollTo({ top: virtualizedItem.meta.top, behavior })
+        scrollTo({ top: scrollItemPositionToScrollTop(item, position), behavior })
       }
     },
-    [items, scrollTo, virtualizedItems],
+    [scrollItemPositionToScrollTop, scrollTo],
   )
 
   const scrollToPosition = useCallback(
-    (position: number, behavior: ScrollBehavior = 'smooth') => {
+    (position: number, { behavior = 'smooth' }: Omit<ScrollToOptions, 'position'> = { behavior: 'smooth' }) => {
       if (scrollRef.current) {
         scrollTo({ top: position, behavior })
       }

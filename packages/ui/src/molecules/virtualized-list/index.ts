@@ -1,2 +1,2 @@
 export * from './virtualized-list'
-export { default as VirtualizedList } from './virtualized-list'
+export { ForwardedVirtualizedList as VirtualizedList } from './virtualized-list'

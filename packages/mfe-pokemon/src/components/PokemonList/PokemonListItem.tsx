@@ -9,6 +9,7 @@ import {
   Image,
   Button,
   useExpandableItemsContext,
+  useSearchableItemsContext,
   Container,
   Text,
   Tabs,
@@ -31,6 +32,7 @@ const TransitionRoute = ({ children }: { children: React.ReactNode }) => {
 export const PokemonListItem = memo(
   ({ item, list, className, style, ...rest }: RenderItemProps<PokemonNodeFragment>) => {
     const expandableItems = useExpandableItemsContext<PokemonNodeFragment>()
+    const searchableItems = useSearchableItemsContext<PokemonNodeFragment>()
     const { data, loading } = usePokemonQuery({
       skip: expandableItems.isItemExpanded(item) === false,
       fetchPolicy: 'cache-and-network',
@@ -45,6 +47,7 @@ export const PokemonListItem = memo(
       <ListItem
         key={item.id}
         className={cn([className, styles.item, { [styles.expanded]: isExpanded }])}
+        active={searchableItems.isCurrent(item)}
         onClick={() => {
           if (!isExpanded) {
             expandableItems.toggleItem(item)

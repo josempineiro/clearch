@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { PokemonNodeFragment } from '../../infrastructure/graphql/generated/graphql'
 import {
   ForwardedVirtualizedList,
@@ -6,12 +6,21 @@ import {
   AutoSizer,
   AutoSizerChildrenProps,
   useExpandableItemsContext,
+  useSearchableItemsContext,
 } from '@clearq/ui'
 import { PokemonListItem } from './PokemonListItem'
 
 const PokemonList = ({ pokemons }: { pokemons: PokemonNodeFragment[] }) => {
   const pokemonListRef = useRef<VirtualizedListRef<PokemonNodeFragment>>(null)
   const expandableItems = useExpandableItemsContext<PokemonNodeFragment>()
+  const { current } = useSearchableItemsContext<PokemonNodeFragment>()
+  useEffect(() => {
+    if (current && pokemonListRef.current) {
+      pokemonListRef.current?.api.scrollToItem(current, {
+        position: 'center',
+      })
+    }
+  }, [current])
   return (
     <AutoSizer>
       {({ height }: AutoSizerChildrenProps) => (

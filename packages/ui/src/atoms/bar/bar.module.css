@@ -1,0 +1,35 @@
+.bar {
+  width: 100%;
+}
+
+.sticky {
+  position: sticky;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.top {
+  top: 0;
+}
+
+.bottom {
+  bottom: 0;
+}
+
+.s {
+  height: 2rem;
+}
+
+.m {
+  height: 3rem;
+}
+
+.l {
+  height: 4rem;
+}
