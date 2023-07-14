@@ -1,16 +1,16 @@
 import { useState, useEffect, cloneElement, useRef } from 'react'
-import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import styles from './tooltip.module.css'
+import { FlexBoxProps, Text, Popup } from '@/atoms'
+import type { PopupProps } from '@/atoms'
 
-export interface TooltipProps {
+export interface TooltipProps extends PopupProps, Omit<FlexBoxProps, 'children' | 'width'> {
   children: React.ReactNode
   target: React.ReactElement
   trigger?: 'click' | 'hover'
   width?: 's' | 'm' | 'l' | 'target' | 'content'
+  absolute?: boolean
 }
 
-export function Tooltip({ children, target, trigger = 'click', width = 'content' }: TooltipProps) {
+export function Tooltip({ children, target, trigger = 'hover', ...rest }: TooltipProps) {
   const [visible, setVisible] = useState<boolean>(false)
   const targetRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
@@ -32,40 +32,6 @@ export function Tooltip({ children, target, trigger = 'click', width = 'content'
   }
 
   useEffect(() => {
-    if (visible && targetRef.current && tooltipRef.current) {
-      const targetRect = targetRef.current.getBoundingClientRect()
-      const tooltipRect = tooltipRef.current.getBoundingClientRect()
-      const tooltipWidth = (() => {
-        switch (width) {
-          case 'content':
-            return tooltipRect.width
-          case 'target':
-            return targetRef.current.offsetWidth
-          case 's':
-            return 200
-          case 'm':
-            return 300
-          case 'l':
-            return 400
-        }
-      })()
-      tooltipRef.current.focus()
-      tooltipRef.current.style.setProperty(
-        'top',
-        `${Math.min(
-          targetRect.top + targetRect.height,
-          Math.max(0, window.innerHeight - tooltipRef.current.offsetHeight),
-        )}px`,
-      )
-      tooltipRef.current.style.setProperty(
-        'left',
-        `${Math.min(targetRect.left, Math.max(0, window.innerWidth - tooltipWidth))}px`,
-      )
-      tooltipRef.current.style.setProperty('width', `${tooltipWidth}px`)
-    }
-  }, [visible, width])
-
-  useEffect(() => {
     if (visible && trigger === 'click') {
       const handler: (event: MouseEvent | TouchEvent) => void = (event) => {
         if (
@@ -84,35 +50,16 @@ export function Tooltip({ children, target, trigger = 'click', width = 'content'
     }
   }, [visible, trigger])
   return (
-    <>
-      {cloneElement(target, {
-        ref: targetRef,
+    <Popup
+      {...rest}
+      visible={visible}
+      target={cloneElement(target, {
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
         onMouseDown: handleMouseDown,
       })}
-      {createPortal(
-        <AnimatePresence>
-          {visible && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className={styles.tooltip}
-              ref={tooltipRef}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              style={{
-                position: 'absolute',
-                zIndex: 1,
-              }}
-            >
-              {children}
-            </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body!,
-      )}
-    </>
+    >
+      <Text Element="p">{children}</Text>
+    </Popup>
   )
 }

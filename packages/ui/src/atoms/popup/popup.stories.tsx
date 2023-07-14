@@ -1,17 +1,17 @@
 import React from 'react'
 import { Meta } from '@storybook/react'
 import type { StoryFn, StoryObj } from '@storybook/react'
-import { Tooltip as TooltipComponent, TooltipProps } from './tooltip'
+import { Popup as PopupComponent, PopupProps } from './popup'
 import { Button } from '@/atoms/button'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-const meta: Meta<typeof TooltipComponent> = {
-  title: 'Atoms/Tooltip',
-  component: TooltipComponent,
+const meta: Meta<typeof PopupComponent> = {
+  title: 'Atoms/Popup',
+  component: PopupComponent,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
   args: {
-    children: 'Tooltip',
+    children: 'Popup',
     target: <Button>Target</Button>,
     variant: 'filled',
     color: 'primary',
@@ -24,16 +24,16 @@ const meta: Meta<typeof TooltipComponent> = {
 
 export default meta
 
-type Story = StoryObj<typeof TooltipComponent>
+type Story = StoryObj<typeof PopupComponent>
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: StoryFn<typeof TooltipComponent> = (args: TooltipProps) => <TooltipComponent {...args} />
+const Template: StoryFn<typeof PopupComponent> = (args: PopupProps) => <PopupComponent {...args} />
 
-export const Tooltip: Story = Template.bind({})
+export const Popup: Story = Template.bind({})
 
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Tooltip.args = {
-  children: 'Tooltip',
+Popup.args = {
+  children: 'Popup',
 }
 
 export const VisibleWithHover: Story = Template.bind({})

@@ -1,15 +1,22 @@
 :root {
   --font-family: 'Nunito', sans-serif;
   --color-white: #ffffff;
-  --color-primary: #646cff;
-  --color-secondary: #a2a2ff;
-  --color-tertiary: #1a1a1a;
+  --color-primary: #1c5cac;
+  --color-secondary: #ffcb02;
+  --color-tertiary: #fe844f;
 
   --color-gray-300: #e0e0e0;
 
   --color-bg: #1a1a1a;
   --color-bg-hover: #2e2e4e;
   --color-bg-focus: #3a3c64;
+
+  --transition-duration: 0.3s;
+  --transition-timing-function: ease-in-out;
+
+  /* Button */
+  --button-transition-duration: var(--transition-duration);
+  --button-transition-timing-function: var(--transition-timing-function);
 
   --layout-bg-color: #1a1a1a;
 

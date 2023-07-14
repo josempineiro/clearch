@@ -75,6 +75,7 @@
     "prettier": "2.8.8",
     "prop-types": "15.8.1",
     "storybook": "7.0.23",
+    "storybook-addon-docs-tabs": "^1.0.3",
     "typescript": "^5.1.6",
     "vite": "4.3.9",
     "vite-plugin-dts": "2.3.0",

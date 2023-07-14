@@ -69,6 +69,10 @@
   padding: 4rem;
 }
 
+.px-xs {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
 .px-s {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -87,6 +91,11 @@
 .px-xl {
   padding-left: 4rem;
   padding-right: 4rem;
+}
+
+.py-xs {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .py-s {
