@@ -7,7 +7,7 @@ interface PokemonInfoProps {
 
 export const PokemonInfo = ({ pokemon }: PokemonInfoProps) => {
   return (
-    <FlexBox direction="column" gap="s" padding={['m', 'none']}>
+    <FlexBox direction="column" gap="s" padding={['none', 'm']}>
       <FlexBox>
         <Text transform="capitalize">abilities:</Text>
         <List direction="row">

@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "build:lib:ui": "cd packages/ui && npm run build:lib",
+    "build:lib:ui": "cd packages/ui && npm run build",
     "build": "npm-run-all -p build:lib:ui",
     "deploy:mfe:pokemon": "cd packages/mfe-pokemon && npm run deploy",
     "dev:mfe:pokemon": "cd packages/mfe-pokemon && npm run dev",
@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@graphql-tools/utils": "^10.0.1",
-    "graphql": "^16.1.0-experimental-stream-defer.6"
+    "graphql": "^16.1.0-experimental-stream-defer.6",
+    "@clearq/ui": "1.0.0"
   }
 }

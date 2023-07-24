@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import cn from 'classnames'
 import styles from './list-item.module.css'
 
@@ -6,9 +7,10 @@ export interface ListItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
   active?: boolean
 }
 
-export const ListItem: React.FC<ListItemProps> = ({ children, className, active, ...rest }) => {
+export const ListItem = forwardRef<HTMLLIElement, ListItemProps>(({ children, className, active, ...rest }, ref) => {
   return (
     <li
+      ref={ref}
       className={cn(className, styles['list-item'], {
         [styles['active']]: active,
       })}
@@ -17,5 +19,6 @@ export const ListItem: React.FC<ListItemProps> = ({ children, className, active,
       {children}
     </li>
   )
-}
+})
+
 export default ListItem

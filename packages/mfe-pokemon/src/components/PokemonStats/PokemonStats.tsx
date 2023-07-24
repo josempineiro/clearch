@@ -7,7 +7,7 @@ interface PokemonStatsProps {
 
 export const PokemonStats = ({ stats }: PokemonStatsProps) => {
   return (
-    <Container padding={['m', 'none']}>
+    <Container padding={['none', 'm']}>
       <Container padding={'xl'}>
         <RadarChart
           dataset={stats.map((stat) => {

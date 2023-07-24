@@ -4,18 +4,42 @@ import { motion, AnimatePresence } from 'framer-motion'
 import cn from 'classnames'
 import { FlexBox, FlexBoxProps } from '@/atoms'
 import styles from './popup.module.css'
+import { useOutsideClick } from '@/hooks'
 
-export interface PopupProps extends Pick<FlexBoxProps, 'children' | 'className' | 'variant' | 'color'> {
+export interface PopupProps extends Pick<FlexBoxProps, 'children' | 'className' | 'color' | 'variant' | 'padding'> {
   target: React.ReactElement
   width?: 's' | 'm' | 'l' | 'target' | 'content'
   visible?: boolean
+  onClickOutside?: () => void
+  offsetX?: number
+  offsetY?: number
 }
 
 const PopupContent = motion(FlexBox)
 
-export function Popup({ children, target, visible = true, width = 'content', className, ...rest }: PopupProps) {
-  const targetRef = useRef<HTMLDivElement>(null)
-  const popupRef = useRef<HTMLDivElement>(null)
+export function Popup({
+  children,
+  target,
+  visible = true,
+  width = 'content',
+  className,
+  onClickOutside,
+  offsetX = 0,
+  offsetY = 0,
+  ...rest
+}: PopupProps) {
+  const targetRef = useRef<HTMLElement>(null)
+  const popupRef = useRef<HTMLElement>(null)
+
+  useOutsideClick(
+    [targetRef, popupRef],
+    () => {
+      if (onClickOutside) {
+        onClickOutside()
+      }
+    },
+    visible,
+  )
 
   useEffect(() => {
     if (visible && targetRef.current && popupRef.current) {
@@ -39,17 +63,17 @@ export function Popup({ children, target, visible = true, width = 'content', cla
       popupRef.current.style.setProperty(
         'top',
         `${Math.min(
-          targetRect.top + targetRect.height,
+          targetRect.top + targetRect.height + offsetY,
           Math.max(0, window.innerHeight - popupRef.current.offsetHeight),
         )}px`,
       )
       popupRef.current.style.setProperty(
         'left',
-        `${Math.min(targetRect.left, Math.max(0, window.innerWidth - popupWidth))}px`,
+        `${Math.min(targetRect.left + offsetX, Math.max(0, window.innerWidth - popupWidth))}px`,
       )
       popupRef.current.style.setProperty('width', `${popupWidth}px`)
     }
-  }, [visible, width])
+  }, [offsetX, offsetY, visible, width])
 
   return (
     <>
@@ -65,6 +89,7 @@ export function Popup({ children, target, visible = true, width = 'content', cla
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className={cn([styles.popup, className])}
+              direction="column"
               {...rest}
             >
               {children}

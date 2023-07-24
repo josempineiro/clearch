@@ -65,20 +65,10 @@ export function SearchableItemsProvider<TItem>({
   const currentChangeRef = useRef<CurrentChangeFn<TItem> | undefined>()
 
   useEffect(() => {
-    console.log('current change', current)
     if (currentChangeRef.current) {
       currentChangeRef.current(current)
     }
   }, [current])
-  useEffect(() => {
-    console.log('currentId change', currentId)
-  }, [currentId])
-  useEffect(() => {
-    console.log('matches change', matches.length)
-  }, [matches])
-  useEffect(() => {
-    console.log('getItemId change', getItemId)
-  }, [getItemId])
 
   useEffect(() => {
     currentChangeRef.current = onCurrentChange

@@ -3,6 +3,7 @@ export interface PokemonPokeApiDto {
   name: string
   url: string
   abilities: Array<{ ability: { name: string; url: string } }>
+  stats: Array<{ base_stat: number; stat: { name: string; url: string } }>
 }
 
 export interface PokemonsPokeApiDto {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import cn from 'classnames'
 import styles from './auto-sizer.module.css'
 import { Container, ContainerProps } from '@/atoms/container'
@@ -19,7 +19,7 @@ export const AutoSizer = ({ children, className, initialWidth = 0, initialHeight
   const [width, setWidth] = React.useState(initialWidth)
   const [height, setHeight] = React.useState(initialHeight)
 
-  React.useEffect(() => {
+  useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect
       setWidth(width)

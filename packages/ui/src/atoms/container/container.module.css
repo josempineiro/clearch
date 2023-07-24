@@ -12,12 +12,24 @@
   height: 100%;
 }
 
+.filled {
+  background-color: var(--color-bg);
+}
+
 .bg-primary {
   background-color: var(--color-primary);
 }
 
 .bg-secondary {
   background-color: var(--color-secondary);
+}
+
+.bg-background {
+  background-color: var(--color-background);
+}
+
+.bg-surface {
+  background-color: var(--color-surface);
 }
 
 .bg-tertiary {
@@ -28,7 +40,7 @@
   background-color: transparent;
 }
 
-.border {
+.outlined {
   border-width: 1px;
   border-style: solid;
 }

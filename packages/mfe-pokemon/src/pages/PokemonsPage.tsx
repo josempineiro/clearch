@@ -3,8 +3,10 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import PokemonList from '@/components/PokemonList/PokemonList'
 import { useAllPokemonsQuery, PokemonNodeFragment } from '@/infrastructure/graphql/generated/graphql'
 import { ExpandableItemsProvider, SearchBar, SearchableItemsProvider, useSearchableItemsContext } from '@clearq/ui'
+import { PokemonsSortBy } from '@/infrastructure/graphql/generated/graphql'
 
 const getPokemonId = (pokemon: PokemonNodeFragment) => pokemon.id
+
 type PokemonsPageParams = {
   id?: string
 }
@@ -12,20 +14,46 @@ type PokemonsPageParams = {
 const PokemonSearch = () => {
   const [search, setSearch] = useSearchParams()
   const { matches, items, next, previous, current } = useSearchableItemsContext<PokemonNodeFragment>()
+  const query = search.get('query') || ''
+  const sortBy = search.get('sortBy') || ''
   return (
     <SearchBar
       value={search.get('query') || ''}
       matches={matches.length}
       current={current ? matches.indexOf(current) + 1 : 0}
       total={items.length}
+      placeholder={`Search pokemons...`}
       onPrevious={previous}
       onNext={next}
       onSearch={(query) => {
         setSearch({
-          current: '',
           query,
+          sortBy,
+          current: '',
         })
       }}
+      sortBy={search.get('sortBy') || 'name'}
+      onSortBy={(sortBy) => {
+        setSearch({
+          query,
+          sortBy,
+          current: current ? getPokemonId(current) : '',
+        })
+      }}
+      sortByOptions={[
+        {
+          label: 'Name',
+          value: 'name',
+        },
+        {
+          label: 'Number',
+          value: 'id',
+        },
+        {
+          label: 'HP',
+          value: 'hp',
+        },
+      ]}
     />
   )
 }
@@ -34,7 +62,15 @@ const PokemonsPage = () => {
   const { id } = useParams<PokemonsPageParams>()
   const navigate = useNavigate()
   const [search, setSearch] = useSearchParams()
-  const allPokemonsQuery = useAllPokemonsQuery()
+  const allPokemonsQuery = useAllPokemonsQuery({
+    variables: {
+      sortBy:
+        (search.get('sortBy') === 'name' && PokemonsSortBy.Name) ||
+        (search.get('sortBy') === 'id' && PokemonsSortBy.Id) ||
+        (search.get('sortBy') === 'hp' && PokemonsSortBy.Hp) ||
+        PokemonsSortBy.Id,
+    },
+  })
   const { data, loading, error } = allPokemonsQuery
 
   const query = search.get('query')
@@ -46,6 +82,7 @@ const PokemonsPage = () => {
         if (nextCurrent.id !== current) {
           setSearch((search) => ({
             query: search.get('query') || '',
+            sortBy: search.get('sortBy') || '',
             current: nextCurrent.id,
           }))
         }
@@ -74,9 +111,9 @@ const PokemonsPage = () => {
       initialExpandedItems={data.pokemons.filter((pokemon) => getPokemonId(pokemon) === id)}
       onToggleItem={(item, isExpanded) => {
         if (isExpanded) {
-          navigate(`/${getPokemonId(item)}`)
+          navigate(`/${getPokemonId(item)}?${search.toString()}`)
         } else {
-          navigate('/')
+          navigate(-1)
         }
       }}
     >

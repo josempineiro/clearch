@@ -32,7 +32,7 @@ export const FlexBox: Story = Template.bind({})
 FlexBox.args = {
   children: (
     <>
-      <FlexItem padding={['xl', 'm']} flex={0} variant="outlined">
+      <FlexItem padding={['m', 'xl']} flex={0} variant="outlined">
         <Text whiteSpace="pre">Item 1</Text>
       </FlexItem>
       <FlexItem padding="xl" flex={1} basis="100%" variant="outlined">

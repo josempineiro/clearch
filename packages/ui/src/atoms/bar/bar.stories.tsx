@@ -12,7 +12,7 @@ const meta: Meta<typeof BarComponent> = {
   argTypes: {
     children: { control: 'text' },
     variant: {
-      options: ['sticky', 'fixed', 'absolute'],
+      options: ['sticky', 'fixed', 'absolute', 'static'],
       control: { type: 'radio' },
     },
     position: {

@@ -13,7 +13,7 @@ export default defineConfig({
       exposes: {
         './Pokemons': './src/modules/Pokemons',
       },
-      shared: ['react', 'react-dom', 'react-router-dom'],
+      shared: ['react', 'react-dom', 'react-router-dom', { 'shared-lib': { packagePath: 'shared-lib' } }],
     }),
   ],
   build: {

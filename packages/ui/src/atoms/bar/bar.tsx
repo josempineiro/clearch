@@ -3,7 +3,7 @@ import styles from './bar.module.css'
 
 export interface BarProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
-  variant?: 'fixed' | 'sticky' | 'static'
+  variant?: 'fixed' | 'sticky' | 'absolute' | 'static'
   position?: 'top' | 'bottom'
   size?: 's' | 'm' | 'l'
 }

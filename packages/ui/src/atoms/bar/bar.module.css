@@ -23,13 +23,13 @@
 }
 
 .s {
-  height: 2rem;
+  min-height: 2rem;
 }
 
 .m {
-  height: 3rem;
+  min-height: 3rem;
 }
 
 .l {
-  height: 4rem;
+  min-height: 4rem;
 }

@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import _ from 'lodash'
 import graphqlFields from 'graphql-fields'
 import { getPokemonById, getPokemons } from '../poke-api'
 import { PokemonPokeApiDto } from '../types'
@@ -7,10 +8,15 @@ interface Ability {
   id: string
   name: string
 }
-interface Pokemon {
+interface Stat {
   id: string
   name: string
+  value: number
+}
+
+interface Pokemon extends PokemonBaseDto {
   abilities: Array<Ability>
+  stats: Array<Stat>
 }
 interface PokemonBaseDto {
   id: string
@@ -46,11 +52,28 @@ const pokemonIdToCursor = (id: string): string => {
   return Buffer.from(id).toString('base64')
 }
 
-const pokemonDtoToPokemon = (pokemonDto: PokemonPokeApiDto): PokemonBaseDto => {
+const pokemonDtoToPokemonBase = (pokemonDto: PokemonPokeApiDto): PokemonBaseDto => {
   return {
     id: pokemonDto.id.toString(),
     name: pokemonDto.name,
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemonDto.id}.svg`,
+  }
+}
+
+const pokemonDtoToPokemon = (pokemonDto: PokemonPokeApiDto): Pokemon => {
+  return {
+    id: pokemonDto.id.toString(),
+    name: pokemonDto.name,
+    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemonDto.id}.svg`,
+    abilities: pokemonDto.abilities.map((ability) => ({
+      id: ability.ability.url.split('/').reverse()[1],
+      name: ability.ability.name,
+    })),
+    stats: pokemonDto.stats.map((stat) => ({
+      id: stat.stat.url.split('/').reverse()[1],
+      name: stat.stat.name,
+      value: stat.base_stat,
+    })),
   }
 }
 
@@ -91,14 +114,18 @@ export async function pokemonsConnetionPageInfo(parent, { first, after }) {
 export async function allPokemons(parent, args, context, info) {
   console.log('Resolvers::allPokemons')
   const pokemons = await getPokemons({ limit: '151' }).then((pokemons) => pokemonsDtoToPokemons(pokemons))
-  if (Object.keys(graphqlFields(info)).every((field) => ['id', 'name', 'image'].indexOf(field) !== -1)) {
-    console.log('Resolvers::allPokemons::base')
-    return pokemons
-  }
-  console.log('Resolvers::allPokemons::details')
-  return (await Promise.all(pokemons.map((pokemon) => context.loaders.pokemons.load(pokemon.id)))).map(
-    pokemonDtoToPokemon,
-  )
+  const allPokemons = await Promise.all(pokemons.map((pokemon) => context.loaders.pokemons.load(pokemon.id)))
+  return _.sortBy(allPokemons, (pokemon) => {
+    switch (args.sortBy) {
+      case 'HP':
+        return pokemonDtoToPokemon(pokemon).stats[0].value
+      case 'NAME':
+        return pokemon.name
+      case 'ID':
+      default:
+        return parseInt(pokemon.id)
+    }
+  }).map(pokemonDtoToPokemonBase)
 }
 
 export async function pokemonsByIds(parent, { ids }, context, info) {
@@ -110,5 +137,5 @@ export async function pokemonsByIds(parent, { ids }, context, info) {
     )
   }
   console.log('Resolvers::pokemonsByIds::details', { ids })
-  return (await Promise.all(ids.map((id) => getPokemonById(id)))).map(pokemonDtoToPokemon)
+  return (await Promise.all(ids.map((id) => getPokemonById(id)))).map(pokemonDtoToPokemonBase)
 }

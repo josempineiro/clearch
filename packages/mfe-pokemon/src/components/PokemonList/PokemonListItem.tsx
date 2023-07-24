@@ -130,7 +130,7 @@ export const PokemonListItem = memo(
                         path={`moves`}
                         Component={() => (
                           <TransitionRoute key="3">
-                            <Container padding={['m', 'none']}>COMING SOON!</Container>
+                            <Container padding={['none', 'm']}>COMING SOON!</Container>
                           </TransitionRoute>
                         )}
                       />

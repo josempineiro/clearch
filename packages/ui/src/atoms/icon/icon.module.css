@@ -1,0 +1,20 @@
+.icon {
+  display: inline-block;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+.s {
+  width: 1rem;
+  height: 1rem;
+}
+
+.m {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.l {
+  width: 2rem;
+  height: 2rem;
+}

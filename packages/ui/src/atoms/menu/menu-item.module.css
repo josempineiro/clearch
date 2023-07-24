@@ -1,0 +1,16 @@
+.menu-item {
+  background-color: transparent;
+}
+
+.menu-item:focus {
+  background-color: var(--color-bg-focus);
+}
+
+.menu-item:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.active,
+.menu-item:active {
+  background-color: var(--color-bg-focus);
+}
