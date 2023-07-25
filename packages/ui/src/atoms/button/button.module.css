@@ -13,7 +13,7 @@
   border: none;
   background: var(--button-bg-color, var(--color-primary));
   color: var(--button-text-color, var(--color-white));
-  transition-property: border-color, background-color, color, transform;
+  transition-property: border-color, background-color, color;
   transition-duration: var(--button-transition-duration);
   transition-timing-function: var(--button-transition-duration);
 }

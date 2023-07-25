@@ -1,0 +1,15 @@
+.grouped-buttons > * {
+  border-radius: 0;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.grouped-buttons > :first-child {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+.grouped-buttons > :last-child {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}

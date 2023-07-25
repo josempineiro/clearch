@@ -115,7 +115,7 @@ export async function allPokemons(parent, args, context, info) {
   console.log('Resolvers::allPokemons')
   const pokemons = await getPokemons({ limit: '151' }).then((pokemons) => pokemonsDtoToPokemons(pokemons))
   const allPokemons = await Promise.all(pokemons.map((pokemon) => context.loaders.pokemons.load(pokemon.id)))
-  return _.sortBy(allPokemons, (pokemon) => {
+  const allPokemonsUnsorted = _.sortBy(allPokemons, (pokemon) => {
     switch (args.sortBy) {
       case 'HP':
         return pokemonDtoToPokemon(pokemon).stats[0].value
@@ -126,6 +126,7 @@ export async function allPokemons(parent, args, context, info) {
         return parseInt(pokemon.id)
     }
   }).map(pokemonDtoToPokemonBase)
+  return args.sortDirection === 'DESC' ? allPokemonsUnsorted.reverse() : allPokemonsUnsorted
 }
 
 export async function pokemonsByIds(parent, { ids }, context, info) {

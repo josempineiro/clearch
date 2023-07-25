@@ -65,6 +65,11 @@ export enum PokemonsSortBy {
   Name = 'NAME'
 }
 
+export enum PokemonsSortDirection {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
 export type Query = {
   __typename?: 'Query';
   allPokemons: Array<Pokemon>;
@@ -77,6 +82,7 @@ export type Query = {
 
 export type QueryAllPokemonsArgs = {
   sortBy?: InputMaybe<PokemonsSortBy>;
+  sortDirection?: InputMaybe<PokemonsSortDirection>;
 };
 
 
@@ -113,6 +119,7 @@ export type Trainer = {
 
 export type AllPokemonsQueryVariables = Exact<{
   sortBy?: InputMaybe<PokemonsSortBy>;
+  sortDirection?: InputMaybe<PokemonsSortDirection>;
 }>;
 
 
@@ -203,8 +210,8 @@ export const PokemonNodeFragmentDoc = gql`
 }
     `;
 export const AllPokemonsDocument = gql`
-    query allPokemons($sortBy: PokemonsSortBy) {
-  pokemons: allPokemons(sortBy: $sortBy) {
+    query allPokemons($sortBy: PokemonsSortBy, $sortDirection: PokemonsSortDirection) {
+  pokemons: allPokemons(sortBy: $sortBy, sortDirection: $sortDirection) {
     id
     name
     image
@@ -225,6 +232,7 @@ export const AllPokemonsDocument = gql`
  * const { data, loading, error } = useAllPokemonsQuery({
  *   variables: {
  *      sortBy: // value for 'sortBy'
+ *      sortDirection: // value for 'sortDirection'
  *   },
  * });
  */

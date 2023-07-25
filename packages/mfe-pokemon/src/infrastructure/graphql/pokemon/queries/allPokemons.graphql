@@ -1,5 +1,5 @@
-query allPokemons($sortBy: PokemonsSortBy) {
-  pokemons: allPokemons(sortBy: $sortBy) {
+query allPokemons($sortBy: PokemonsSortBy, $sortDirection: PokemonsSortDirection) {
+  pokemons: allPokemons(sortBy: $sortBy, sortDirection: $sortDirection) {
     id
     name
     image

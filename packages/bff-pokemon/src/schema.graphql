@@ -65,11 +65,16 @@ enum PokemonsSortBy {
   HP
 }
 
+enum PokemonsSortDirection {
+  ASC
+  DESC
+}
+
 # The "Query" type is special: it lists all of the available queries that
 # clients can execute, along with the return type for each. In this
 # case, the "books" query returns an array of zero or more Books (defined above).
 type Query {
-  allPokemons(sortBy: PokemonsSortBy): [Pokemon!]!
+  allPokemons(sortBy: PokemonsSortBy, sortDirection: PokemonsSortDirection): [Pokemon!]!
   pokemonsByIds(ids: [ID!]!): [Pokemon!]!
   pokemons(first: Int, after: String): PokemonsConnection!
   pokemon(id: ID!): Pokemon!

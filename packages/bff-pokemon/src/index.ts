@@ -1,5 +1,5 @@
-import { yoga } from './yoga'
 import { createServer } from 'node:http'
+import { yoga } from './yoga'
 
 const server = createServer(yoga)
 

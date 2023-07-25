@@ -13,6 +13,31 @@ export const typeDefs = readFileSync(
   { encoding: 'utf-8' },
 )
 
+const graphiqlDefaultQuery = `
+query {
+  pokemon(id: "1") {
+    id
+    name
+    ... @defer {
+      details {
+        height
+        weight
+        stats {
+          id
+          name
+          value
+          characteristics
+        }
+        abilities {
+          id
+          name
+          effects
+        }
+      }
+    }
+  }
+}`
+
 export const yoga = createYoga<ServerContext>({
   schema: createSchema({
     typeDefs,
@@ -33,31 +58,6 @@ export const yoga = createYoga<ServerContext>({
   plugins: [useDeferStream()],
   renderGraphiQL,
   graphiql: {
-    defaultQuery: `
-    query {
-      pokemon(id: "1") {
-        id
-        name
-        ... @defer {
-          details {
-            height
-            weight
-            stats {
-              id
-              name
-              value
-              characteristics
-            }
-            abilities {
-              id
-              name
-              effects
-            }
-          }
-        }
-      }
-    }
-        
-    `.replace(/\n {6}/g, '\n'),
+    defaultQuery: graphiqlDefaultQuery,
   },
 })
