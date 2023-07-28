@@ -3,19 +3,8 @@ import _ from 'lodash'
 import cn from 'classnames'
 import { Routes, Route, useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  ListItem,
-  RenderItemProps,
-  Image,
-  Button,
-  useExpandableItemsContext,
-  useSearchableItemsContext,
-  Container,
-  Text,
-  Tabs,
-  TabItem,
-  TabItems,
-} from '@clearq/ui'
+import { ListItem, RenderItemProps, Image, Button, Container, Text, Tabs, TabItem, TabItems } from '@clearq/ui'
+import { useExpandableItemsContext, useSearchableItemsContext } from '@clearq/core'
 import { usePokemonQuery, PokemonNodeFragment } from '@/infrastructure/graphql/generated/graphql'
 import { PokemonInfo } from '@/components/PokemonInfo'
 import { PokemonStats } from '@/components/PokemonStats'

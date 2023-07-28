@@ -1,20 +1,23 @@
 import React from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
-import PokemonList from '@/components/PokemonList/PokemonList'
-import { useAllPokemonsQuery, PokemonNodeFragment } from '@/infrastructure/graphql/generated/graphql'
+import { PokemonList } from '@/components/PokemonList'
+import { PokemonsSortingDropdownMenuButton } from '@/components/PokemonsSortingDropdownMenuButton'
+import {
+  useAllPokemonsQuery,
+  PokemonNodeFragment,
+  PokemonsSortBy,
+  PokemonsSortDirection,
+} from '@/infrastructure/graphql/generated/graphql'
 import {
   Button,
-  ExpandableItemsProvider,
   SearchBar,
-  SearchableItemsProvider,
-  useSearchableItemsContext,
   GroupedButtons,
 } from '@clearq/ui'
-import { PokemonsSortBy, PokemonsSortDirection } from '@/infrastructure/graphql/generated/graphql'
 import {
-  PokemonsSortingDropdownMenuButton,
-  usePokemonSortingOptions,
-} from '@/components/PokemonsSortingDropdownMenuButton'
+  ExpandableItemsProvider,
+  SearchableItemsProvider,
+  useSearchableItemsContext,
+} from '@clearq/core'
 
 const getPokemonId = (pokemon: PokemonNodeFragment) => pokemon.id
 
@@ -25,9 +28,9 @@ type PokemonsPageParams = {
 const PokemonSearch = () => {
   const [search, setSearch] = useSearchParams()
   const { matches, items, next, previous, current } = useSearchableItemsContext<PokemonNodeFragment>()
-  const query = search.get('query') || ''
-  const sortBy = search.get('sortBy') || ''
-  const direction = search.get('direction') || ''
+  const query = search.get('query') ?? ''
+  const sortBy = search.get('sortBy') ?? ''
+  const direction = search.get('direction') ?? ''
   const handleToggleSortDirection = React.useCallback(() => {
     setSearch({
       query,
@@ -38,7 +41,7 @@ const PokemonSearch = () => {
   }, [query, sortBy, direction, setSearch])
   return (
     <SearchBar
-      value={search.get('query') || ''}
+      value={search.get('query') ?? ''}
       matches={matches.length}
       current={current ? matches.indexOf(current) + 1 : 0}
       total={items.length}
@@ -105,17 +108,16 @@ const PokemonsPage = () => {
 
   const query = search.get('query')
   const current = search.get('current')
-  const direction = search.get('direction')
 
   const onCurrentChange = React.useCallback(
     (nextCurrent: PokemonNodeFragment | undefined) => {
       if (nextCurrent) {
         if (nextCurrent.id !== current) {
           setSearch((search) => ({
-            query: search.get('query') || '',
-            sortBy: search.get('sortBy') || '',
+            query: search.get('query') ?? '',
+            sortBy: search.get('sortBy') ?? '',
+            direction: search.get('direction') ?? '',
             current: nextCurrent.id,
-            direction: search.get('direction') || '',
           }))
         }
       }
@@ -125,7 +127,7 @@ const PokemonsPage = () => {
 
   const match = React.useCallback(
     (pokemon: PokemonNodeFragment) => {
-      return query ? pokemon.name.match(query as string) !== null : true
+      return query ? RegExp(query).exec(pokemon.name) !== null : false
     },
     [query],
   )

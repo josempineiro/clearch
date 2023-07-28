@@ -1,5 +1,5 @@
 import './App.css'
-import Pokemons from './modules/Pokemons'
+import Pokemons from './remotes/Pokemons'
 import { BrowserRouter } from 'react-router-dom'
 import { Layout, Text } from '@clearq/ui'
 

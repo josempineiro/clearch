@@ -1,16 +1,10 @@
 import { useRef, useEffect } from 'react'
 import { PokemonNodeFragment } from '../../infrastructure/graphql/generated/graphql'
-import {
-  ForwardedVirtualizedList,
-  VirtualizedListRef,
-  AutoSizer,
-  AutoSizerChildrenProps,
-  useExpandableItemsContext,
-  useSearchableItemsContext,
-} from '@clearq/ui'
+import { ForwardedVirtualizedList, VirtualizedListRef, AutoSizer, AutoSizerChildrenProps } from '@clearq/ui'
+import { useExpandableItemsContext, useSearchableItemsContext } from '@clearq/core'
 import { PokemonListItem } from './PokemonListItem'
 
-const PokemonList = ({ pokemons }: { pokemons: PokemonNodeFragment[] }) => {
+export const PokemonList = ({ pokemons }: { pokemons: PokemonNodeFragment[] }) => {
   const pokemonListRef = useRef<VirtualizedListRef<PokemonNodeFragment>>(null)
   const expandableItems = useExpandableItemsContext<PokemonNodeFragment>()
   const { current } = useSearchableItemsContext<PokemonNodeFragment>()
@@ -38,5 +32,3 @@ const PokemonList = ({ pokemons }: { pokemons: PokemonNodeFragment[] }) => {
     </AutoSizer>
   )
 }
-
-export default PokemonList
