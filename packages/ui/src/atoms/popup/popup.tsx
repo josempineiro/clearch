@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import cn from 'classnames'
 import { FlexBox, FlexBoxProps } from '@/atoms'
 import styles from './popup.module.css'
-import { useOutsideClick } from '@/hooks'
+import { useOutsideClick } from '@clearq/core'
 
 export interface PopupProps extends Pick<FlexBoxProps, 'children' | 'className' | 'color' | 'variant' | 'padding'> {
   target: React.ReactElement

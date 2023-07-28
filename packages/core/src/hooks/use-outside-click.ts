@@ -8,7 +8,7 @@ export function useOutsideClick(
   useEffect(() => {
     if (enable) {
       const handler: (event: MouseEvent | TouchEvent) => void = (event) => {
-        if (!elements.some((element) => element.current && element.current.contains(event.target as HTMLElement))) {
+        if (!elements.some((element) => element.current?.contains(event.target as HTMLElement))) {
           callback(event)
         }
       }

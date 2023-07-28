@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import { Tooltip } from '@/atoms/tooltip'
+import { Tooltip } from '@/molecules/tooltip'
 import styles from './radar-chart.module.css'
 
 export interface RadarData {

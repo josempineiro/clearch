@@ -9,7 +9,8 @@
   "scripts": {
     "test": "test",
     "build:lib:ui": "cd packages/ui && npm run build",
-    "build": "npm-run-all -p build:lib:ui",
+    "build:lib:core": "cd packages/core && npm run build",
+    "build": "npm run build:lib:core && npm run build:lib:ui",
     "deploy:mfe:pokemon": "cd packages/mfe-pokemon && npm run deploy",
     "dev:mfe:pokemon": "cd packages/mfe-pokemon && npm run dev",
     "dev:bff:pokemon": "cd packages/bff-pokemon && npm run dev",
