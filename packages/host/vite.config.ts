@@ -11,7 +11,7 @@ export default defineConfig({
       remotes: {
         remotePokemon: 'http://localhost:5002/assets/remotePokemon.js',
       },
-      shared: ['react', 'react-dom', 'react-router-dom', { 'shared-lib': { version: '2.0.0' } }],
+      shared: ['react', 'react-dom', 'react-router-dom'],
     }),
   ],
   build: {

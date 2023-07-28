@@ -11,9 +11,9 @@ export default defineConfig({
       name: 'remotePokemon',
       filename: 'remotePokemon.js',
       exposes: {
-        './Pokemons': './src/modules/Pokemons',
+        './Pokemons': './src/remotes/Pokemons',
       },
-      shared: ['react', 'react-dom', 'react-router-dom', { 'shared-lib': { packagePath: 'shared-lib' } }],
+      shared: ['react', 'react-dom', 'react-router-dom'],
     }),
   ],
   build: {

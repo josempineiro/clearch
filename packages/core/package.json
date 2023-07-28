@@ -32,8 +32,7 @@
     "classnames": "^2.3.2",
     "framer-motion": "^10.12.18",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "shared-lib": "file:../../../shared-lib/shared-lib-1.0.0.tgz"
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.22.5",
