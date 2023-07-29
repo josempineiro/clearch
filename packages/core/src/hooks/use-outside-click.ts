@@ -1,23 +1,26 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 export function useOutsideClick(
   elements: Array<React.RefObject<HTMLElement>>,
-  callback: (event: MouseEvent | TouchEvent) => void,
-  enable = true,
+  handler: (event: MouseEvent | TouchEvent) => void,
+  enable: boolean,
 ) {
+  const handlerRef = useRef(handler)
+  useEffect(() => {
+    handlerRef.current = handler
+  }, [handler, elements])
   useEffect(() => {
     if (enable) {
-      const handler: (event: MouseEvent | TouchEvent) => void = (event) => {
+      const eventHandler: (event: MouseEvent | TouchEvent) => void = (event) => {
         if (!elements.some((element) => element.current?.contains(event.target as HTMLElement))) {
-          callback(event)
+          handlerRef.current(event)
         }
       }
-      document.addEventListener('touchstart', handler)
-      document.addEventListener('mousedown', handler)
+      document.addEventListener('click', eventHandler)
+
       return () => {
-        document.removeEventListener('touchstart', handler)
-        document.removeEventListener('mousedown', handler)
+        document.removeEventListener('click', eventHandler)
       }
     }
-  }, [enable, callback, elements])
+  }, [enable, handler, elements])
 }

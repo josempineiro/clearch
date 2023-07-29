@@ -1,7 +1,9 @@
-export const LoremIpsum = () => {
+import { Text } from '@/atoms'
+
+export const LoremIpsum = ({ length = 'medium' }: { length?: 'small' | 'medium' | 'large' }) => {
   return (
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut suscipit commodo massa, eu gravida ante ultrices sed.
+    <Text Element="p">
+      {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut suscipit commodo massa, eu gravida ante ultrices sed.
       Pellentesque ac purus in augue gravida dignissim. Suspendisse tempus lectus eu quam sodales, ut euismod mi tempor.
       Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vivamus nec rhoncus
       diam, vitae euismod risus. Aliquam erat volutpat. Proin et auctor ante, vel vestibulum risus. Proin nunc libero,
@@ -70,7 +72,14 @@ export const LoremIpsum = () => {
       maximus vel. Suspendisse dictum dictum nisi, et luctus elit. Praesent eu eros sed felis venenatis maximus.
       Pellentesque sed nisi iaculis, consectetur lorem sed, suscipit urna. Nam orci tellus, pretium quis felis eu,
       consequat aliquam metus. Nunc efficitur ultrices faucibus. Vivamus at eleifend arcu. Aliquam in ultricies eros.
-      Phasellus vitae lobortis tortor.
-    </p>
+      Phasellus vitae lobortis tortor.`.substring(
+        0,
+        {
+          small: 60,
+          medium: 200,
+          large: 1000,
+        }[length],
+      )}
+    </Text>
   )
 }

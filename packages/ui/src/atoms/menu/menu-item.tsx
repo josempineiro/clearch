@@ -22,7 +22,7 @@ export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(({ label, activ
       ])}
     >
       <FlexBox Element={ListItem} alignItems="center" justifyContent="space-between" padding={['xs', 's']}>
-        <Text>{label}</Text>
+        <Text whiteSpace="pre">{label}</Text>
       </FlexBox>
     </ListItem>
   )

@@ -5,12 +5,20 @@ import { DropdownButton as DropdownButtonComponent, DropdownButtonProps } from '
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof DropdownButtonComponent> = {
-  title: 'Atoms/DropdownButton',
+  title: 'Molecules/DropdownButton',
   component: DropdownButtonComponent,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
+  tags: ['autodocs'],
   args: {
-    children: 'DropdownButton',
+    content: (
+      <div
+        style={{
+          width: '100px',
+          height: '100px',
+        }}
+      />
+    ),
   },
   parameters: {
     layout: 'centered',
@@ -29,6 +37,4 @@ const Template: StoryFn<typeof DropdownButtonComponent> = (args: DropdownButtonP
 export const DropdownButton: Story = Template.bind({})
 
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-DropdownButton.args = {
-  children: 'DropdownButton',
-}
+DropdownButton.args = {}

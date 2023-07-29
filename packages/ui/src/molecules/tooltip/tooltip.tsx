@@ -52,6 +52,9 @@ export function Tooltip({ children, target, trigger = 'hover', ...rest }: Toolti
   return (
     <Popup
       {...rest}
+      padding={['xs', 's']}
+      variant="filled"
+      color="primary"
       visible={visible}
       target={cloneElement(target, {
         onMouseEnter: handleMouseEnter,

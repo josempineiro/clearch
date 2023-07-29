@@ -6,16 +6,13 @@ import { Button } from '@/atoms/button'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof TooltipComponent> = {
-  title: 'Atoms/Tooltip',
+  title: 'Molecules/Tooltip',
   component: TooltipComponent,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
   args: {
     children: 'Tooltip',
     target: <Button>Target</Button>,
-    variant: 'filled',
-    color: 'primary',
-    padding: ['s', 'xs'],
   },
   parameters: {
     layout: 'centered',
