@@ -1,15 +1,14 @@
+import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
+import _ from 'lodash'
+import styles from './my-module.module.css'
 
-import React, { useEffect, useState } from 'react';
-import cn  from 'classnames';
-import _  from 'lodash';
-import styles  from './my-module.module.css';
-
-export interface MyComponentProps extends React.HTMLAttributes<HTMLDivElement> { children: React.ReactNode; }
-
-export const MyComponent: React.FC<MyComponentProps> = (props) => {
-  return (<div
-  className={cn(styles.container, props.className)}
-  >{props.children}</div>);
+export interface MyComponentProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode
 }
 
-export default MyComponent;
+export const MyComponent: React.FC<MyComponentProps> = (props) => {
+  return <div className={cn(styles.container, props.className)}>{props.children}</div>
+}
+
+export default MyComponent
