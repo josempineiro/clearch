@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import _ from 'lodash'
 
 interface PropDefinition {
   name: string
@@ -46,8 +47,13 @@ function hasChildren(element: ElementDefinition): boolean {
 }
 
 function generateElement(element: ElementDefinition): string {
-  return `<${element.name}
-  ${generateProps(element.props)}
+  const hasProps = element.props.filter((propDefinition) => propDefinition.name !== 'children').length > 0
+  return `<${element.name} ${
+    hasProps
+      ? `
+  ${generateProps(element.props)}`
+      : ''
+  }
   ${
     hasChildren(element)
       ? `>{${element.props.find((prop) => prop.name === 'children')?.value}}</${element.name}>`
@@ -75,13 +81,15 @@ function generateComponent(
   const componentCode = `
 ${generateImports(importedModules)}
 
-export interface ${componentName}Props ${propsInterface}
+export interface ${_.capitalize(_.camelCase(componentName))}Props ${propsInterface}
 
-export const ${componentName}: React.FC<${componentName}Props> = (props) => {
+export const ${_.capitalize(_.camelCase(componentName))}: React.FC<${_.capitalize(
+    _.camelCase(componentName),
+  )}Props> = (props) => {
   return (${generateElement(returnedElementDefinition)});
 }
 
-export default ${componentName};
+export default ${_.capitalize(_.camelCase(componentName))};
 `
 
   return componentCode
@@ -99,15 +107,57 @@ function generatePropsInterface(propsDefinition: PropsDefinition): string {
 }
 
 function saveComponentToFile(componentName: string, componentCode: string): void {
-  fs.writeFileSync(`${componentName}.tsx`, componentCode)
+  fs.mkdirSync(`${_.kebabCase(componentName)}`, { recursive: true })
+  fs.writeFileSync(`${_.kebabCase(componentName)}/index.tsx`, `export * from './${componentName}'`)
+  fs.writeFileSync(`${_.kebabCase(componentName)}/${_.kebabCase(componentName)}.tsx`, componentCode)
+  fs.writeFileSync(
+    `${_.kebabCase(componentName)}/${_.kebabCase(componentName)}.module.css`,
+    `.${_.kebabCase(componentName)} {}`,
+  )
+  fs.writeFileSync(
+    `${_.kebabCase(componentName)}/${_.kebabCase(componentName)}.stories.tsx`,
+    `import React from 'react'
+import { ${_.capitalize(_.camelCase(componentName))}, ${_.capitalize(
+      _.camelCase(componentName),
+    )}Props } from './${_.kebabCase(componentName)}'
+import { Meta } from '@storybook/react'
+import type { StoryFn } from '@storybook/react'
+
+// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
+const meta: Meta<typeof ${_.capitalize(_.camelCase(componentName))}> = {
+  title: 'Atoms/${_.capitalize(_.camelCase(componentName))}',
+  component: ${_.capitalize(_.camelCase(componentName))},
+  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
+  argTypes: {
+    children: { control: 'text' },
+  },
+}
+export default meta
+
+// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
+const Template: StoryFn<typeof ${_.capitalize(_.camelCase(componentName))}> = (args: ${_.capitalize(
+      _.camelCase(componentName),
+    )}Props) => <${_.capitalize(_.camelCase(componentName))} {...args} />
+
+const ${_.capitalize(_.camelCase(componentName))}Story = Template.bind({})
+
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+${_.capitalize(_.camelCase(componentName))}Story.args = {
+  children: '${_.capitalize(_.camelCase(componentName))}',
+}
+export {
+  ${_.capitalize(_.camelCase(componentName))}Story as ${_.capitalize(_.camelCase(componentName))},
+}
+  `,
+  )
 }
 
 // Ejemplo de uso
-const componentName = 'MyComponent'
+const componentName = 'absolute-position'
 
 const propsDefinition: PropsDefinition = {
   props: [{ name: 'children', type: 'React.ReactNode', required: true }],
-  extends: 'React.HTMLAttributes<HTMLDivElement>',
+  extends: 'React.HTMLAttributes<HTMLLabelElement>',
 }
 
 const returnedElementDefinition: ElementDefinition = {
@@ -117,7 +167,7 @@ const returnedElementDefinition: ElementDefinition = {
       name: 'className',
       type: 'ref',
       required: true,
-      value: 'cn(styles.container, props.className)',
+      value: `cn(styles.absolute-position, props.className)`,
     },
     {
       name: 'children',
@@ -139,11 +189,7 @@ const importedModulesDefinition = [
     defaultImport: 'cn',
   },
   {
-    module: 'lodash',
-    defaultImport: '_',
-  },
-  {
-    module: './my-module.module.css',
+    module: './absolute-position.module.css',
     defaultImport: 'styles',
   },
 ]
