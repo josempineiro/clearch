@@ -17,24 +17,25 @@
   color: var(--text-color-tertiary);
 }
 
-.body {
-  font-size: 16px;
-  line-height: 24px;
-}
-
 .title {
   font-size: 24px;
   line-height: 32px;
 }
-
 .subtitle {
   font-size: 20px;
   line-height: 28px;
 }
-
+.body {
+  font-size: 16px;
+  line-height: 24px;
+}
 .caption {
   font-size: 14px;
   line-height: 20px;
+}
+.overline {
+  font-size: 12px;
+  line-height: 16px;
 }
 
 .capitalized {

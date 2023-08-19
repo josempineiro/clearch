@@ -1,13 +1,15 @@
 import { forwardRef } from 'react'
-import { Menu, PopupProps } from '@/atoms'
+import { Menu, PopupProps, Scrollable } from '@/atoms'
 import { Dropdown } from '@/molecules'
 
 export type DropdownMenuProps = PopupProps
 
-export const DropdownMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(({ children, ...rest }, ref) => {
+export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(({ children, ...rest }, ref) => {
   return (
     <Dropdown ref={ref} padding={['xs', 'none']} {...rest}>
-      <Menu>{children}</Menu>
+      <Scrollable>
+        <Menu>{children}</Menu>
+      </Scrollable>
     </Dropdown>
   )
 })

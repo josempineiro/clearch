@@ -1,6 +1,6 @@
 import { Text } from '@/atoms'
 
-export const LoremIpsum = ({ length = 'medium' }: { length?: 'small' | 'medium' | 'large' }) => {
+export const LoremIpsum = ({ length = 'full' }: { length?: 'small' | 'medium' | 'large' | 'full' }) => {
   return (
     <Text Element="p">
       {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut suscipit commodo massa, eu gravida ante ultrices sed.
@@ -78,6 +78,7 @@ export const LoremIpsum = ({ length = 'medium' }: { length?: 'small' | 'medium' 
           small: 60,
           medium: 200,
           large: 1000,
+          full: Infinity
         }[length],
       )}
     </Text>

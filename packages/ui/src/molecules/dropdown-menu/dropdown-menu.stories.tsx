@@ -31,15 +31,14 @@ const Template: StoryFn<typeof DropdownMenuComponent> = (args: DropdownMenuProps
         onClickOutside={toggle}
         target={<MenuItem onClick={toggle} active={visible} label={'Item'} />}
       >
-        <Tooltip usePortal={false} offsetX={8} position="left" alignment="middle" target={<MenuItem label="Item 1" />}>
+        <Tooltip offsetX={8} position="left" alignment="middle" target={<MenuItem label="Item 1" />}>
           Item 1 description
         </Tooltip>
-        <Tooltip usePortal={false} offsetX={8} position="left" alignment="middle" target={<MenuItem label="Item 2" />}>
+        <Tooltip offsetX={8} position="left" alignment="middle" target={<MenuItem label="Item 2" />}>
           Item 2 description
         </Tooltip>
 
         <Tooltip
-          usePortal={false}
           offsetX={8}
           position="left"
           alignment="middle"

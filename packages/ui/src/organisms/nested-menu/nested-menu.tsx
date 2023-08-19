@@ -1,74 +1,53 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { useToggleState } from '@clearq/core'
-import { MenuItem, Menu } from '@/atoms'
+import { MenuItem, Menu, MenuItemProps } from '@/atoms'
 import { Tooltip, DropdownMenu, DropdownMenuProps } from '@/molecules'
 
-export interface NestedMenuItem {
+export interface MenuItemNested {
+  id: string
   label: string
   description?: string
-  items?: NestedMenuItem[]
+  items?: MenuItemNested[]
 }
-export interface NestedMenuItemWithItems extends NestedMenuItem {
-  items: NestedMenuItem[]
+export interface MenuItemWithNestedItems extends MenuItemNested {
+  items: MenuItemNested[]
 }
 
-const isNestedMenuItemWithItems = (item: NestedMenuItem): item is NestedMenuItemWithItems => {
-  return (item as NestedMenuItemWithItems).items?.length > 0
+const isNestedMenuItemWithItems = (item: MenuItemNested): item is MenuItemWithNestedItems => {
+  return (item as MenuItemWithNestedItems).items?.length > 0
 }
 
 export interface NestedMenuProps {
-  items: NestedMenuItem[]
+  items: MenuItemNested[]
   closeOnItemClick?: boolean
 }
 
-export const NestedMenuItemWithDescription: React.FC<NestedMenuItem> = ({ label, description }) => {
+interface MenuItemWithDescriptionProps extends MenuItemProps {
+  description?: string
+}
+
+export const MenuItemWithDescription = forwardRef<HTMLLIElement, MenuItemWithDescriptionProps>(({ description, ...rest }, ref) => {
+  if (!description) {
+    return <MenuItem {...rest} ref={ref} />
+  }
   return (
-    <Tooltip usePortal={false} offsetX={8} position="left" alignment="middle" target={<MenuItem label={label} />}>
+    <Tooltip offsetX={8} ref={ref} position="left" alignment="middle" target={<MenuItem {...rest} />}>
       {description}
     </Tooltip>
   )
-}
+})
 
-export const NestedMenuItemWithItems = ({
-  item,
-  position,
-  alignment,
-}: {
-  item: NestedMenuItemWithItems
+interface NestedMenuItemWithItemsProps {
+  item: MenuItemWithNestedItems
   position?: DropdownMenuProps['position']
   alignment?: DropdownMenuProps['alignment']
-}) => {
-  const [visible, toggle] = useToggleState()
-  return (
-    <DropdownMenu
-      visible={visible}
-      onClickOutside={toggle}
-      position={position}
-      alignment={alignment}
-      target={<MenuItem onClick={toggle} active={visible} label={item.label} />}
-    >
-      {item.items.map((item, index) => {
-        return <NestedMenuItemWithDescriptionTooltip key={index} item={item} />
-      })}
-    </DropdownMenu>
-  )
 }
 
-export const NestedMenuItem: React.FC<{
-  item: NestedMenuItem
-  position?: DropdownMenuProps['position']
-  alignment?: DropdownMenuProps['alignment']
-}> = ({ item, position = 'right', alignment = 'start' }) => {
-  if (isNestedMenuItemWithItems(item)) {
-    return <NestedMenuItemWithItems item={item} position={position} alignment={alignment} />
-  }
-  return <MenuItem label={item.label} />
-}
 
-export const NestedMenuItemWithDescriptionTooltip: React.FC<{ item: NestedMenuItem }> = ({ item }) => {
+export const NestedMenuItemWithDescriptionTooltip: React.FC<{ item: MenuItemNested }> = ({ item }) => {
   if (item.description) {
     return (
-      <Tooltip offsetX={8} position="left" alignment="middle" target={<NestedMenuItem item={item} />}>
+      <Tooltip position="left" alignment="middle" target={<NestedMenuItem item={item} />}>
         {item.description}
       </Tooltip>
     )
@@ -76,15 +55,46 @@ export const NestedMenuItemWithDescriptionTooltip: React.FC<{ item: NestedMenuIt
   return <NestedMenuItem item={item} />
 }
 
+export const NestedMenuItemWithItems = forwardRef<HTMLLIElement, NestedMenuItemWithItemsProps>(({
+  item,
+  position = 'right',
+  alignment
+}, ref) => {
+  const [visible, toggle] = useToggleState()
+  return (
+    <DropdownMenu
+      visible={visible}
+      position={position}
+      alignment={alignment}
+      offsetY={['bottom', 'top'].includes(position) ? 0 : -8}
+      target={<MenuItemWithDescription ref={ref} onClick={toggle} active={visible} label={item.label} description={item.description} />}
+    >
+      {item.items.map((item) => {
+        return <NestedMenuItemWithDescriptionTooltip key={item.id} item={item} />
+      })}
+    </DropdownMenu>
+  )
+})
+
+export interface NestedMenuItemProps {
+  item: MenuItemNested
+  position?: DropdownMenuProps['position']
+  alignment?: DropdownMenuProps['alignment']
+}
+
+export const NestedMenuItem = forwardRef<HTMLLIElement, NestedMenuItemProps>(({ item, position, alignment }, ref) => {
+  if (isNestedMenuItemWithItems(item)) {
+    return <NestedMenuItemWithItems ref={ref} item={item} position={position} alignment={alignment} />
+  }
+  return <MenuItemWithDescription ref={ref} label={item.label} description={item.description} />
+})
+
 export const NestedMenu: React.FC<NestedMenuProps> = ({ items }) => {
   return (
     <Menu>
-      {items.map((item, index) => {
-        if (isNestedMenuItemWithItems(item)) {
-          return <NestedMenuItem key={index} item={item} position="bottom" alignment="start" />
-        }
-        return <MenuItem key={index} label={item.label} />
-      })}
+      {items.map((item) => (
+        <NestedMenuItem key={item.id} item={item} position="bottom" alignment="start" />
+      ))}
     </Menu>
   )
 }

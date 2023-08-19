@@ -2,7 +2,7 @@ import React, { forwardRef, ForwardedRef } from 'react'
 import cn from 'classnames'
 import styles from './text.module.css'
 
-export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
+export interface TextProps<Element = HTMLSpanElement> extends React.HTMLAttributes<Element> {
   children: React.ReactNode
   Element?: React.ElementType
   color?: 'primary' | 'secondary' | 'tertiary'

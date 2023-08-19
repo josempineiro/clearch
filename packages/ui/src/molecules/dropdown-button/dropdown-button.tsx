@@ -8,7 +8,7 @@ export interface DropdownButtonProps extends Omit<PopupProps, 'target' | 'visibl
   content: React.ReactNode
 }
 
-export const DropdownButton = forwardRef<HTMLDivElement, DropdownButtonProps>(
+export const DropdownButton = forwardRef<HTMLElement, DropdownButtonProps>(
   (
     {
       children = (

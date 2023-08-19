@@ -55,7 +55,7 @@ export const FlexBox = forwardRef<HTMLDivElement, FlexBoxProps>(
 )
 
 export const FlexItem = forwardRef<HTMLDivElement, FlexItemProps>(
-  ({ children, flex, grow, shrink, basis, ...rest }, ref) => {
+  ({ children, flex, grow, shrink, basis, className, ...rest }, ref) => {
     return (
       <FlexBox
         {...rest}
@@ -63,7 +63,7 @@ export const FlexItem = forwardRef<HTMLDivElement, FlexItemProps>(
         style={{
           flex: flex ?? `${grow} ${shrink} ${basis}`,
         }}
-        className={cn([styles.item])}
+        className={cn([className, styles.item])}
       >
         {children}
       </FlexBox>

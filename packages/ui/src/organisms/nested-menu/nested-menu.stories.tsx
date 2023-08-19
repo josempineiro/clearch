@@ -25,24 +25,30 @@ const Template: StoryFn<typeof DropdownMenuComponent> = () => {
     <NestedMenu
       items={[
         {
+
+          id: 'item-1',
           label: 'Item 1',
           description: 'Item 1 description',
           items: [
             {
+              id: 'item-1-1',
               label: 'Item 1.1',
               description: 'Item 1.1 description',
               items: [
                 {
+                  id: 'item-1-1-1',
                   label: 'Item 1.1.1',
                   description: 'Item 1.1.1 description',
                 },
                 {
+                  id: 'item-1-1-2',
                   label: 'Item 1.1.2',
                   description: 'Item 1.1.2 description',
                 },
               ],
             },
             {
+              id: 'item-1-2',
               label: 'Item 1.2',
               description: 'Item 1.2 description',
             },

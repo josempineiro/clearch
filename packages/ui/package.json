@@ -30,12 +30,13 @@
     "test:coverage": "vitest --coverage",
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\"",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "generate:doc": "typedoc src/index.ts --tsconfig tsconfig.json --json docs.json "
   },
   "dependencies": {
     "@clearq/core": "^1.0.0",
     "classnames": "^2.3.2",
-    "framer-motion": "^10.12.18",
+    "framer-motion": "^10.15.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
@@ -69,6 +70,7 @@
     "prop-types": "15.8.1",
     "storybook": "7.0.23",
     "storybook-addon-docs-tabs": "^1.0.3",
+    "typedoc": "^0.24.8",
     "typescript": "^5.1.6",
     "vite": "4.3.9",
     "vite-plugin-dts": "2.3.0",

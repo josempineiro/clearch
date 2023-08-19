@@ -1,4 +1,4 @@
-import { PopupAlignment, PopupPosition, PopupWidth } from './popup.types'
+import { PopupAlignment, PopupPosition, PopupWidth, PopupStyles } from './popup.types'
 
 export const CONENT_WIDTH_S = 200
 export const CONENT_WIDTH_M = 300
@@ -14,7 +14,7 @@ export interface CalculatePopupPositionParameters {
   offsetY: number
 }
 
-export const calcutatePopupPosition = ({
+export const calcutatePopupStyles = ({
   targetRect,
   contentRect,
   width,
@@ -22,13 +22,29 @@ export const calcutatePopupPosition = ({
   alignment,
   offsetX,
   offsetY,
-}: CalculatePopupPositionParameters): {
-  x: number
-  y: number
-  width: number
-  height: number
-} => {
-  const popupWidth = (() => {
+}: CalculatePopupPositionParameters): PopupStyles => {
+  const availableWidth = () => {
+    switch (position) {
+      case 'left':
+        return targetRect.x - offsetX
+      case 'right':
+        return window.innerWidth - offsetX - (targetRect.x + targetRect.width)
+      case 'top':
+      case 'bottom':
+      default:
+        switch (alignment) {
+          case 'middle':
+            return window.innerWidth - offsetX
+          case 'end':
+            return window.innerWidth - offsetX - (window.innerWidth - (targetRect.x + targetRect.width))
+          case 'start':
+          default:
+            return window.innerWidth - offsetX - targetRect.x
+        }
+    }
+  }
+
+  const popupMaxWidth = (() => {
     switch (width) {
       case 's':
         return CONENT_WIDTH_S
@@ -43,25 +59,42 @@ export const calcutatePopupPosition = ({
         return contentRect.width
       case 'content':
       default:
-        return contentRect.width
+        return Math.min(contentRect.width, availableWidth())
     }
   })()
-  const popupHeight = (() => {
+
+  const popupWidth = (() => {
     switch (width) {
+      case 'content':
+        return Math.min(contentRect.width, availableWidth())
+      default:
+        return 'auto'
+    }
+  })()
+
+  const popupMinWidth = (() => {
+    switch (width) {
+      case 's':
+        return CONENT_WIDTH_S
+      case 'm':
+        return CONENT_WIDTH_M
+      case 'l':
+        return CONENT_WIDTH_L
       case 'target':
-        if (position === 'left' || position === 'right') {
-          return targetRect.height
+        if (position === 'bottom' || position === 'top') {
+          return targetRect.width
         }
-        return contentRect.height
+        return contentRect.width
       case 'content':
       default:
-        return contentRect.height
+        return 0
     }
   })()
+
   const popupX = (() => {
     switch (position) {
       case 'left':
-        return targetRect.left - contentRect.width - offsetX
+        return targetRect.left - offsetX
       case 'right':
         return targetRect.left + targetRect.width + offsetX
       case 'top':
@@ -69,9 +102,9 @@ export const calcutatePopupPosition = ({
       default:
         switch (alignment) {
           case 'middle':
-            return targetRect.left + targetRect.width / 2 - popupWidth / 2 + offsetX
+            return targetRect.left + targetRect.width / 2 + offsetX
           case 'end':
-            return targetRect.left + targetRect.width - popupWidth - offsetX
+            return targetRect.left + targetRect.width - offsetX
           case 'start':
           default:
             return targetRect.left + offsetX
@@ -82,7 +115,7 @@ export const calcutatePopupPosition = ({
   const popupY = (() => {
     switch (position) {
       case 'top':
-        return targetRect.top - contentRect.height - offsetY
+        return targetRect.top - offsetY
       case 'bottom':
         return targetRect.top + targetRect.height + offsetY
       case 'left':
@@ -90,19 +123,65 @@ export const calcutatePopupPosition = ({
       default:
         switch (alignment) {
           case 'middle':
-            return targetRect.top + targetRect.height / 2 - contentRect.height / 2 + offsetY
+            return targetRect.top + targetRect.height / 2 + offsetY
           case 'end':
-            return targetRect.top + targetRect.height - contentRect.height - offsetX
+            return targetRect.top + targetRect.height - offsetX
           case 'start':
           default:
             return targetRect.top + offsetY
         }
     }
   })()
+
+  const transformY = (() => {
+    switch (position) {
+      case 'top':
+        return -100
+      case 'bottom':
+        return 0
+      case 'left':
+      case 'right':
+      default:
+        switch (alignment) {
+          case 'middle':
+            return -50
+          case 'end':
+            return -100
+          case 'start':
+          default:
+            return 0
+        }
+    }
+  })()
+
+  const transformX = (() => {
+    switch (position) {
+      case 'left':
+        return -100
+      case 'right':
+        return 0
+      case 'top':
+      case 'bottom':
+      default:
+        switch (alignment) {
+          case 'middle':
+            return -50
+          case 'end':
+            return -100
+          case 'start':
+          default:
+            return 0
+        }
+    }
+  })()
+
   return {
-    x: popupX,
-    y: popupY,
+    left: popupX,
+    top: popupY,
+    maxWidth: popupMaxWidth,
+    minWidth: popupMinWidth,
     width: popupWidth,
-    height: popupHeight,
+    transformY,
+    transformX,
   }
 }

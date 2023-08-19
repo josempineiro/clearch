@@ -48,6 +48,7 @@ const app = async (): Promise<UserConfigExport> => {
     test: {
       globals: true,
       environment: 'jsdom',
+      setupFiles: ['@testing-library/jest-dom'],
     },
   })
 }

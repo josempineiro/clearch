@@ -1,14 +1,20 @@
 :root {
   --font-family: 'Nunito', sans-serif;
   --color-white: #ffffff;
-  --color-primary: #1c5cac;
-  --color-primary-hover: #356aab;
-  --color-secondary: #ffcb02;
-  --color-tertiary: #fe844f;
+  --color-primary: #05afc9;
+  --color-primary-hover: #03c8e6;
+  --color-secondary: #204954;
+  --color-secondary-hover: #32839a;
+  --color-tertiary: #6c6c6c;
+  --color-tertiary-hover: #929191;
+
+  --color-danger: #dc3915;
+  --color-transparent: transparent;
 
   --color-gray-300: #e0e0e0;
 
   --color-bg: #1a1a1a;
+  --background-color: #1a1a1a;
   --color-bg-hover: #3a3c64;
   --color-bg-focus: #2e2e4e;
 
@@ -36,6 +42,7 @@
 
 body {
   font-family: var(--font-family);
+  background: var(--background-color);
 }
 
 /* RESET */
@@ -48,4 +55,8 @@ body {
 ul,
 ol {
   list-style: none;
+}
+
+.docs-story {
+  background-color: var(--background-color);
 }

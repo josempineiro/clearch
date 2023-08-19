@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { calcutatePopupPosition, CalculatePopupPositionParameters } from './popup.utils' //
+import { calcutatePopupStyles, CalculatePopupPositionParameters } from './popup.utils' //
 
 export const CONENT_WIDTH_S = 200
 export const CONENT_WIDTH_M = 300
@@ -41,17 +41,18 @@ const TARGET_RECT = new DOMRect(TARGET_X, TARGET_Y, TARGET_WIDTH, TARGET_HEIGHT)
 const CONTENT_RECT = new DOMRect(CONTENT_X, CONTENT_Y, CONTENT_WIDTH, CONTENT_HEIGHT)
 
 describe('Popup.util', () => {
-  let expectedResult: ReturnType<typeof calcutatePopupPosition>
+  let expectedResult: ReturnType<typeof calcutatePopupStyles>
   let parameters: CalculatePopupPositionParameters
   beforeEach(() => {
     expectedResult = {
-      x: TARGET_X + OFFSET_X,
-      y: TARGET_Y + TARGET_HEIGHT + OFFSET_Y,
+      left: TARGET_X + OFFSET_X,
+      top: TARGET_Y + TARGET_HEIGHT + OFFSET_Y,
       width: CONTENT_WIDTH,
-      height: CONTENT_HEIGHT,
+      transformX: 0,
+      transformY: 0,
     }
     parameters = {
-      targetRect: TARGET_RECT, // The type definitions are not complete, so we use 'as any' here to bypass the type check.
+      targetRect: TARGET_RECT,
       contentRect: CONTENT_RECT,
       width: 'content',
       offsetX: OFFSET_X,
@@ -65,25 +66,32 @@ describe('Popup.util', () => {
       test('when width is s', () => {
         parameters.width = 's'
         expectedResult.width = CONENT_WIDTH_S
-        const popupPosition = calcutatePopupPosition(parameters)
-        expect(popupPosition).toEqual(expectedResult)
+        expectedResult.width = CONENT_WIDTH_S
+        const popupPosition = calcutatePopupStyles(parameters)
+        expect(popupPosition).toEqual({
+          left: 210,
+          top: 310,
+          width: 200,
+          transformX: 0,
+          transformY: 0,
+        })
       })
       test('when width is m', () => {
         parameters.width = 'm'
         expectedResult.width = CONENT_WIDTH_M
-        const popupPosition = calcutatePopupPosition(parameters)
+        const popupPosition = calcutatePopupStyles(parameters)
         expect(popupPosition).toEqual(expectedResult)
       })
       test('when width is l', () => {
         parameters.width = 'l'
         expectedResult.width = CONENT_WIDTH_L
-        const popupPosition = calcutatePopupPosition(parameters)
+        const popupPosition = calcutatePopupStyles(parameters)
         expect(popupPosition).toEqual(expectedResult)
       })
       test('when width is content', () => {
         parameters.width = 'content'
         expectedResult.width = CONTENT_WIDTH
-        const popupPosition = calcutatePopupPosition(parameters)
+        const popupPosition = calcutatePopupStyles(parameters)
         expect(popupPosition).toEqual(expectedResult)
       })
     })
@@ -91,119 +99,127 @@ describe('Popup.util', () => {
       describe('when position is top', () => {
         beforeEach(() => {
           parameters.position = 'top'
-          expectedResult.y = TARGET_Y - CONTENT_HEIGHT - OFFSET_Y
+          expectedResult.top = TARGET_Y - OFFSET_Y
+          expectedResult.transformY = -100
         })
         test('and alignment is start', () => {
           parameters.alignment = 'start'
-          expectedResult.x = TARGET_X + OFFSET_X
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.left = TARGET_X + OFFSET_X
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and alignment is middle', () => {
           parameters.alignment = 'middle'
-          expectedResult.x = TARGET_X + TARGET_WIDTH / 2 - CONTENT_WIDTH / 2 + OFFSET_X
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.left = TARGET_X + TARGET_WIDTH / 2 + OFFSET_X
+          expectedResult.transformX = -50
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and alignment is end', () => {
           parameters.alignment = 'end'
-          expectedResult.x = TARGET_X + TARGET_WIDTH - CONTENT_WIDTH - OFFSET_X
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.left = TARGET_X + TARGET_WIDTH - OFFSET_X
+          expectedResult.transformX = -100
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and width is target', () => {
           parameters.width = 'target'
           expectedResult.width = TARGET_WIDTH
-          expectedResult.height = CONTENT_HEIGHT
-          const popupPosition = calcutatePopupPosition(parameters)
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
       })
       describe('when position is bottom', () => {
         beforeEach(() => {
           parameters.position = 'bottom'
-          expectedResult.y = TARGET_Y + TARGET_HEIGHT + OFFSET_Y
+          expectedResult.top = TARGET_Y + TARGET_HEIGHT + OFFSET_Y
         })
         test('and alignment is start', () => {
           parameters.alignment = 'start'
-          expectedResult.x = TARGET_X + OFFSET_X
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.left = TARGET_X + OFFSET_X
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and alignment is middle', () => {
           parameters.alignment = 'middle'
-          expectedResult.x = TARGET_X + TARGET_WIDTH / 2 - CONTENT_WIDTH / 2 + OFFSET_X
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.left = TARGET_X + TARGET_WIDTH / 2 + OFFSET_X
+          expectedResult.transformX = -50
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and alignment is end', () => {
           parameters.alignment = 'end'
-          expectedResult.x = TARGET_X + TARGET_WIDTH - CONTENT_WIDTH - OFFSET_X
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.left = TARGET_X + TARGET_WIDTH - OFFSET_X
+          expectedResult.transformX = -100
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and width is target', () => {
           parameters.width = 'target'
           expectedResult.width = TARGET_WIDTH
-          expectedResult.height = CONTENT_HEIGHT
-          const popupPosition = calcutatePopupPosition(parameters)
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
       })
       describe('when position is left', () => {
         beforeEach(() => {
           parameters.position = 'left'
-          expectedResult.x = TARGET_X - CONTENT_WIDTH - OFFSET_X
+          expectedResult.left = TARGET_X - OFFSET_X
+          expectedResult.transformX = -100
+          expectedResult.width = 190
         })
         test('and alignment is start', () => {
           parameters.alignment = 'start'
-          expectedResult.y = TARGET_Y + OFFSET_Y
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.top = TARGET_Y + OFFSET_Y
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and alignment is middle', () => {
           parameters.alignment = 'middle'
-          expectedResult.y = TARGET_Y + TARGET_HEIGHT / 2 - CONTENT_HEIGHT / 2 + OFFSET_Y
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.top = TARGET_Y + TARGET_HEIGHT / 2 + OFFSET_Y
+          expectedResult.transformY = -50
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and alignment is end', () => {
           parameters.alignment = 'end'
-          expectedResult.y = TARGET_Y + TARGET_HEIGHT - CONTENT_HEIGHT - OFFSET_Y
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.top = TARGET_Y + TARGET_HEIGHT - OFFSET_Y
+          expectedResult.transformY = -100
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and width is target', () => {
           parameters.width = 'target'
           parameters.alignment = 'start'
-          expectedResult.y = TARGET_Y + OFFSET_Y
+          expectedResult.top = TARGET_Y + OFFSET_Y
           expectedResult.width = CONTENT_WIDTH
-          expectedResult.height = TARGET_HEIGHT
-          const popupPosition = calcutatePopupPosition(parameters)
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
       })
       describe('when position is right', () => {
         beforeEach(() => {
           parameters.position = 'right'
-          expectedResult.x = TARGET_X + TARGET_WIDTH + OFFSET_X
+          expectedResult.left = TARGET_X + TARGET_WIDTH + OFFSET_X
         })
         test('and alignment is start', () => {
           parameters.alignment = 'start'
-          expectedResult.y = TARGET_Y + OFFSET_Y
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.top = TARGET_Y + OFFSET_Y
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and alignment is middle', () => {
           parameters.alignment = 'middle'
-          expectedResult.y = TARGET_Y + TARGET_HEIGHT / 2 - CONTENT_HEIGHT / 2 + OFFSET_Y
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.top = TARGET_Y + TARGET_HEIGHT / 2 + OFFSET_Y
+          expectedResult.transformY = -50
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
         test('and alignment is end', () => {
           parameters.alignment = 'end'
-          expectedResult.y = TARGET_Y + TARGET_HEIGHT - CONTENT_HEIGHT - OFFSET_Y
-          const popupPosition = calcutatePopupPosition(parameters)
+          expectedResult.transformY = -100
+          expectedResult.top = TARGET_Y + TARGET_HEIGHT - OFFSET_Y
+          const popupPosition = calcutatePopupStyles(parameters)
           expect(popupPosition).toEqual(expectedResult)
         })
       })

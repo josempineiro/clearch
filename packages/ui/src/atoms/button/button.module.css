@@ -1,63 +1,139 @@
+:root {
+  --button-letter-spacing: var(--letter-spacing-m, 0.1rem);
+  --button-font-family: var(--font-family, sans-serif);
+  --button-font-weight: var(--font-weight-bold, 600);
+
+  --button-primary-fill-color: var(--color-primary, #05afc9);
+  --button-primary-text-color: var(--background-color, #1a1a1a);
+  --button-primary-stroke-color: var(--color-primary, #05afc9);
+
+  --button-secondary-fill-color: var(--text-color-secondary, #ddd);
+  --button-secondary-text-color: var(--background-color, #1a1a1a);
+  --button-secondary-stroke-color: var(--text-color-secondary, #ddd);
+
+  --button-danger-fill-color: var(--color-danger, #dc3915);
+  --button-danger-text-color: var(--background-color, #1a1a1a);
+  --button-danger-stroke-color: var(--color-danger, #dc3915);
+
+  --button-outlined-border-width: var(--border-width, 1px);
+
+  --button-border-style: var(--border-style, solid);
+  --button-border-radius: var(--border-radius, 0.5rem);
+  --button-border-width: var(--border-width, 1px);
+
+  --button-border-radius-s: var(--border-radius-s, 0.25rem);
+  --button-border-radius-m: var(--border-radius-m, 0.5rem);
+  --button-border-radius-l: var(--border-radius-l, 0.75rem);
+
+  --button-transition-duration: var(--transition-duration, 0.2s);
+  --button-transition-timing-function: var(--transition-timing-function, ease-in-out);
+}
+
 .button[disabled] {
   opacity: 0.5;
   pointer-events: none;
 }
 
 .button {
-  display: inline-flex;
-  border-radius: var(--button-border-radius, 0.5rem);
-  letter-spacing: 0.075rem;
-  font-weight: 600;
-  font-family: var(--font-family);
   cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+
   border: none;
-  background: var(--button-bg-color, var(--color-primary));
-  color: var(--button-text-color, var(--color-white));
-  transition-property: border-color, background-color, color;
+  outline: none;
+  border-radius: var(--button-border-radius);
+
+  letter-spacing: var(--button-letter-spacing);
+  font-weight: var(--button-font-weight);
+  font-family: var(--button-font-family);
+  text-transform: uppercase;
+
+  transition-property: border, background-color, color;
   transition-duration: var(--button-transition-duration);
   transition-timing-function: var(--button-transition-duration);
 }
 
-.button:hover,
-.active,
-.button:focus,
-.button:focus-visible {
-  box-shadow: 0 0 0 2px var(--button-bg-color);
-  outline: 8px auto var(--color-bg);
+.button:hover {
+  filter: brightness(1.1);
+}
+
+.button:active {
+  filter: brightness(1.2);
+}
+
+.button:focus-visible:not(.outlined),
+.active:not(.outlined) {
+  outline-color: var(--button-stroke-color);
+  outline-style: solid;
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+
+.button:focus-visible.outlined,
+.active.outlined {
+  outline-color: var(--button-stroke-color);
+  outline-style: solid;
+  outline-width: 1px;
+  outline-offset: 0px;
+}
+
+.filled {
+  background: var(--button-fill-color);
+  color: var(--button-text-color);
+}
+
+.outlined {
+  color: var(--button-fill-color);
+  background: var(--background-color);
+  border-width: var(--button-border-width);
+  border-style: var(--button-border-style);
+  border-color: var(--button-stroke-color);
+}
+
+.default {
+  color: var(--button-fill-color);
+  background: var(--background-color);
 }
 
 .primary {
-  --button-bg-color: var(--color-primary);
-  --button-text-color: var(--color-white);
+  --button-fill-color: var(--button-primary-fill-color);
+  --button-text-color: var(--button-primary-text-color);
+  --button-stroke-color: var(--button-primary-stroke-color);
 }
 
 .secondary {
-  --button-bg-color: var(--color-white);
-  --button-text-color: var(--color-bg);
+  --button-fill-color: var(--button-secondary-fill-color);
+  --button-text-color: var(--button-secondary-text-color);
+  --button-stroke-color: var(--button-secondary-stroke-color);
 }
 
-.tertiary {
-  --button-bg-color: var(--color-bg);
-  --button-text-color: var(--color-white);
+.danger {
+  --button-fill-color: var(--button-danger-fill-color);
+  --button-text-color: var(--button-danger-text-color);
+  --button-stroke-color: var(--button-danger-stroke-color);
 }
 
 .s {
+  --button-border-radius: var(--button-border-radius-s, 0.25rem);
   min-height: 1.5rem;
   padding: 0.375rem 0.75rem;
   font-size: 0.625rem;
-  line-height: 1.5;
+  line-height: 1;
 }
 
 .m {
+  --button-border-radius: var(--button-border-radiuss-m, 0.5rem);
   min-height: 2rem;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  line-height: 1.5;
+  line-height: 1;
 }
 
 .l {
-  min-height: 3rem;
+  --button-border-radius: var(--button-border-radius-m, 0.5rem);
+  min-height: 2.5rem;
   padding: 0.625rem 1.25rem;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1;
 }

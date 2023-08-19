@@ -1,15 +1,27 @@
-import { useEffect, cloneElement, useRef, forwardRef } from 'react'
+import { useEffect, cloneElement, useCallback, useRef, useState, forwardRef } from 'react'
 import { createPortal } from 'react-dom'
 import cn from 'classnames'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useOutsideClick, useMergeRefs } from '@clearq/core'
-import { Container, ContainerProps } from '@/atoms'
-import { PopupContent, PopupTarget, PopupAlignment, PopupPosition, PopupWidth } from './popup.types'
-import { calcutatePopupPosition } from './popup.utils'
+import { useOutsideClick, useMergeRefs, useEventListener } from '@clearq/core'
+import { Container, ContainerProps } from '@/atoms/container'
+import { PopupContent, PopupTarget, PopupAlignment, PopupPosition, PopupWidth, PopupStyles } from './popup.types'
+import { calcutatePopupStyles } from './popup.utils'
 import styles from './popup.module.css'
 
+
+/**
+ * Popup component
+ */
 export interface PopupProps extends Pick<ContainerProps, 'children' | 'className' | 'color' | 'variant' | 'padding'> {
-  target: React.ReactElement
+  /** Target element or function that returns target element **/
+  target: React.ReactElement | (({ ref, visible }: {
+    ref: React.Ref<HTMLElement>
+    visible: boolean
+  }) => React.ReactNode)
+  /**
+   * Show or hide popup
+   * @default true
+   **/
   visible?: boolean
   onClickOutside?: () => void
   usePortal?: boolean
@@ -23,7 +35,7 @@ export interface PopupProps extends Pick<ContainerProps, 'children' | 'className
 
 const PopupContentWrapper = motion(Container)
 
-export const Popup = forwardRef<HTMLDivElement, PopupProps>(
+export const Popup = forwardRef<HTMLElement, PopupProps>(
   (
     {
       children,
@@ -45,6 +57,37 @@ export const Popup = forwardRef<HTMLDivElement, PopupProps>(
     const targetRef = useRef<PopupTarget>(null)
     const contentRef = useRef<PopupContent>(null)
     const mergedRefs = useMergeRefs([targetRef, ref])
+    const [popupStyles, setPopupStyles] = useState<PopupStyles | undefined>(undefined)
+
+    const setContentPosition = useCallback(() => {
+      if (visible && targetRef.current && contentRef.current) {
+        setPopupStyles(calcutatePopupStyles({
+          targetRect: targetRef.current.getBoundingClientRect(),
+          contentRect: contentRef.current.getBoundingClientRect(),
+          width,
+          position,
+          alignment,
+          offsetX,
+          offsetY,
+        }))
+      } else {
+        setPopupStyles(undefined)
+      }
+    }, [alignment, offsetX, offsetY, position, visible, width])
+
+    const normalizedPopupStyles = popupStyles ? {
+      top: `${Math.max(0, popupStyles.top)}px`,
+      left: `${Math.max(0, popupStyles.left)}px`,
+      maxWidth: `${popupStyles.maxWidth}px`,
+      minWidth: `${popupStyles.minWidth}px`,
+      width: popupStyles.width === 'auto' ? 'auto' : `${popupStyles.width}px`,
+      transform: `translate(${popupStyles.transformX}%, ${popupStyles.transformY}%)`,
+    } : {}
+
+
+    useEventListener(document, 'scroll', () => {
+      setContentPosition()
+    })
 
     useOutsideClick(
       [targetRef, contentRef],
@@ -56,50 +99,27 @@ export const Popup = forwardRef<HTMLDivElement, PopupProps>(
       visible,
     )
 
+
+
     useEffect(() => {
-      if (visible && targetRef.current && contentRef.current) {
-        const {
-          x: popupLeft,
-          y: popupTop,
-          width: popupWidth,
-          height: popupHeight,
-        } = calcutatePopupPosition({
-          targetRect: targetRef.current.getBoundingClientRect(),
-          contentRect: contentRef.current.getBoundingClientRect(),
-          width,
-          position,
-          alignment,
-          offsetX,
-          offsetY,
-        })
-        contentRef.current.focus()
-        contentRef.current.style.setProperty('top', `${Math.max(0, popupTop)}px`)
-        contentRef.current.style.setProperty('left', `${Math.max(0, popupLeft)}px`)
-        contentRef.current.style.setProperty(
-          'width',
-          `${Math.min(popupWidth, window.innerWidth - Math.max(0, popupLeft))}px`,
-        )
-        contentRef.current.style.setProperty(
-          'height',
-          `${Math.min(popupHeight, window.innerHeight - Math.max(0, popupTop))}px`,
-        )
-      }
-    }, [alignment, offsetX, offsetY, position, visible, width])
+      setContentPosition()
+    }, [setContentPosition])
 
     return (
       <>
-        {cloneElement(target, {
-          ref: mergedRefs,
-        })}
+        {(typeof target === 'function'
+          ? target({ visible, ref: mergedRefs })
+          : cloneElement(target, { ref: mergedRefs }))}
         {createPortal(
           <AnimatePresence>
             {visible && (
               <PopupContentWrapper
+                key={`${position} - ${alignment} - ${width}`}
                 ref={contentRef}
                 exit={{ opacity: 0 }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                style={{}}
+                style={normalizedPopupStyles}
                 className={cn([styles.popup, className])}
                 {...rest}
               >

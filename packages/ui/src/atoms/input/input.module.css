@@ -1,13 +1,32 @@
 .input {
   width: 100%;
   outline: none;
-  padding: 0.5rem;
-  border: 2px solid var(--color-gray-300);
+  color: var(--text-color-primary);
+  background-color: var(--color-bg-focus);
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--color-bg-hover);
   border-radius: 0.25rem;
   font-size: 1rem;
   font-family: var(--font-family);
   transition: border-color var(--transition-duration) var(--transition-timing-function);
 }
+
 .input:focus {
-  border-color: var(--color-primary);
+  border-color: var(--text-color-primary);
+}
+
+.input[type='text'],
+.input[type='password'],
+.input[type='email'],
+.input[type='number'],
+.input[type='date'],
+.input[type='time'],
+.input[type='datetime-local'],
+.input[type='month'],
+.input[type='week'],
+.input[type='search'],
+.input[type='tel'],
+.input[type='url'] {
+  padding: 0.5rem;
 }

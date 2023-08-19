@@ -24,6 +24,10 @@ export const TabsContext = createContext<TabsContextValue>({
   onChange: () => undefined,
 })
 
+/**
+ * This is a custom hook that will throw an error if the component is not wrapped in a Tabs component.
+ * This is useful for making sure that the component is used correctly.
+ **/
 export function useTabsContext() {
   const context = React.useContext(TabsContext)
   if (context === undefined) {

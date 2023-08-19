@@ -1,0 +1,23 @@
+:root {
+  --card-border-color: var(--border-color, #e0e0e0);
+}
+
+.card {
+  display: inline-flex;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--card-border-color);
+  position: relative;
+}
+
+.card-header {
+  position: relative;
+}
+
+.card-l {
+  aspect-ratio: 4 / 2;
+}
+
+.card-m {
+  aspect-ratio: 2 / 3;
+}
